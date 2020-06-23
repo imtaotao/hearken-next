@@ -3,7 +3,13 @@
  * (c) 2020-2020 Imtaotao and JiangLiruii
  * Released under the MIT License.
  */
-function init() {
-    console.log("init");
-}
-init();
+function aa(d) { }
+
+var index = {
+    a: function (p) {
+        console.log(p);
+    },
+    d: aa,
+};
+
+export default index;

@@ -5,7 +5,13 @@
  */
 'use strict';
 
-function init() {
-    console.log("init");
-}
-init();
+function aa(d) { }
+
+var index = {
+    a: function (p) {
+        console.log(p);
+    },
+    d: aa,
+};
+
+module.exports = index;
