@@ -1,3 +1,1 @@
-export default function aa(d) {
-
-}
+export default function aa(d) {}
