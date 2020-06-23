@@ -11,7 +11,7 @@ const typescript = require('rollup-plugin-typescript2')
 const packageJSON = require('../package.json')
 const libName = packageJSON.name
 const entryPath = path.resolve(__dirname, '../src/index.ts')
-const outputPath = filename => path.resolve(__dirname, '../dist', filename)
+const outputPath = (filename) => path.resolve(__dirname, '../dist', filename)
 
 const banner =
   '/*!\n' +
@@ -68,10 +68,11 @@ async function build(cfg) {
       typescript({
         typescript: require('typescript'),
         tsconfig: path.resolve(__dirname, '../tsconfig.json'),
+        clean: true, // no cache
       }),
       cmd(),
       createReplacePlugin(),
-    ]
+    ],
   }
 
   const bundle = await rollup.rollup(buildCfg)
@@ -84,14 +85,11 @@ console.clear()
 rm('../dist')
 
 const buildVersion = async () => {
-  const builds = [
-    build(esm, 'esm'),
-    build(cjs, 'cjs'),
-    build(uglifyCjs, 'min'),
-  ]
+  const builds = [build(esm), build(cjs), build(uglifyCjs)]
 
   try {
     await Promise.all(builds)
+    console.log('success')
   } catch (error) {
     console.error('[ERROR]: ', error)
   }
