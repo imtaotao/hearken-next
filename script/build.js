@@ -5,6 +5,7 @@ const babel = require('rollup-plugin-babel')
 const cmd = require('rollup-plugin-commonjs')
 const cleanup = require('rollup-plugin-cleanup')
 const replace = require('rollup-plugin-replace')
+const { terser } = require('rollup-plugin-terser')
 const resolve = require('rollup-plugin-node-resolve')
 const typescript = require('rollup-plugin-typescript2')
 
@@ -53,7 +54,7 @@ const createReplacePlugin = () => {
   })
 }
 
-async function build(cfg) {
+async function build(cfg, isUglify = false) {
   cfg.output.sourcemap = false
 
   const buildCfg = {
@@ -75,6 +76,10 @@ async function build(cfg) {
     ],
   }
 
+  if (isUglify) {
+    buildCfg.plugins.unshift(terser())
+  }
+
   const bundle = await rollup.rollup(buildCfg)
   await bundle.generate(cfg.output)
   await bundle.write(cfg.output)
@@ -85,7 +90,11 @@ console.clear()
 rm('../dist')
 
 const buildVersion = async () => {
-  const builds = [build(esm), build(cjs), build(uglifyCjs)]
+  const builds = [
+    build(esm),
+    build(cjs),
+    build(uglifyCjs, true),
+  ]
 
   try {
     await Promise.all(builds)
