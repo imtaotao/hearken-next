@@ -21,7 +21,7 @@ const umd = {
     name: libName,
     file: outputPath,
     sourcemap: true,
-  }
+  },
 }
 
 const createReplacePlugin = () => {
@@ -43,7 +43,7 @@ async function build (cfg) {
         cacheRoot: path.resolve(__dirname, '../.rts2_cache'),
       }),
       createReplacePlugin(),
-    ]
+    ],
   }
 
   const bundle = await rollup.rollup(buildCfg)
