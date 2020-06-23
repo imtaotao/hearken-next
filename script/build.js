@@ -89,7 +89,7 @@ const buildVersion = async () => {
 
   try {
     await Promise.all(builds)
-    console.log('success')
+    console.log('success!')
   } catch (error) {
     console.error('[BUILD ERROR]: ', error)
   }

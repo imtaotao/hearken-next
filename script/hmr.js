@@ -37,9 +37,10 @@ async function build (cfg) {
       resolve(),
       typescript({
         check: true,
+        clean: true,
         typescript: require('typescript'),
         tsconfig: path.resolve(__dirname, '../tsconfig.json'),
-        cacheRoot: path.resolve(__dirname, '../node_modules/.rts2_cache'),
+        cacheRoot: path.resolve(__dirname, '../.rts2_cache'),
       }),
       createReplacePlugin(),
     ]
@@ -59,6 +60,7 @@ const buildVersion = async () => {
     await build(umd)
   } catch (error) {
     console.error('[HMR BUILD ERROR]: ', error)
+    process.exit(1)
   }
 }
 
@@ -72,6 +74,7 @@ fs.watch(watchFiles, { recursive: true }, () => {
 })
 
 buildVersion()
+console.log('Watching...')
 
 if (process.argv.includes('-o')) {
   if (fs.existsSync(devHtml)) {
