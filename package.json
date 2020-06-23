@@ -1,0 +1,13 @@
+{
+  "name": "hearken2.0",
+  "version": "0.0.1",
+  "description": "",
+  "main": "script.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+  },
+  "author": "",
+  "license": "MIT"
+}
