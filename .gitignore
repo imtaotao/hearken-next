@@ -10,6 +10,7 @@ test/unit/coverage
 test/e2e/reports
 selenium-debug.log
 dev/
+dist/
 
 # Editor directories and files
 .idea
