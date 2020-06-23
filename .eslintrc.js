@@ -24,6 +24,7 @@ module.exports = {
       'ObjectExpression > SpreadElement',
       'ObjectPattern > RestElement'
     ],
+    'semi': [2, 'never'],
     'no-var': 2,
     'camelcase': 2,
     'indent': [2, 2],
