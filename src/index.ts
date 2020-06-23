@@ -1,8 +1,9 @@
 import d from './d/a'
+import aa from './dd/a';
 
 export default {
   a(p: string) {
-    console.log(p);
+    console.log('11');
   },
   d,
 }

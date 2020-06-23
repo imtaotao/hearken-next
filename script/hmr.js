@@ -14,7 +14,7 @@ const devHtml = path.resolve(__dirname, '../dev/index.html')
 const entryPath = path.resolve(__dirname, '../src/index.ts')
 const outputPath = path.resolve(__dirname, '../dev/lib', `${libName}.js`)
 
-const esm = {
+const umd = {
   input: entryPath,
   output: {
     format: 'umd',
@@ -30,15 +30,16 @@ const createReplacePlugin = () => {
   })
 }
 
-async function build (cfg, type) {
+async function build (cfg) {
   const buildCfg = {
     input: cfg.input,
     plugins: [
       resolve(),
       typescript({
+        check: true,
         typescript: require('typescript'),
         tsconfig: path.resolve(__dirname, '../tsconfig.json'),
-        cacheRoot: path.resolve(__dirname, `../.cache_${type}`),
+        cacheRoot: path.resolve(__dirname, '../node_modules/.rts2_cache'),
       }),
       createReplacePlugin(),
     ]
@@ -55,10 +56,9 @@ rm(libDir)
 
 const buildVersion = async () => {
   try {
-    await build(esm, 'esm')
+    await build(umd)
   } catch (error) {
-    console.error('[ERROR]: ', error)
-    process.exit(1)
+    console.error('[HMR BUILD ERROR]: ', error)
   }
 }
 

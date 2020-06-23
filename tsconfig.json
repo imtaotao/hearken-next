@@ -14,7 +14,6 @@
     "allowSyntheticDefaultImports": true,
     "module": "es6",
     "target": "es5",
-    "jsx": "react",
     "plugins": [{ "name": "tslint-language-service" }],
     "types": ["node"]
   },
