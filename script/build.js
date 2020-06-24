@@ -12,7 +12,7 @@ const typescript = require('rollup-plugin-typescript2')
 const packageJSON = require('../package.json')
 const libName = packageJSON.name
 const entryPath = path.resolve(__dirname, '../src/index.ts')
-const outputPath = (filename) => path.resolve(__dirname, '../dist', filename)
+const outputPath = filename => path.resolve(__dirname, '../dist', filename)
 
 const banner =
   '/*!\n' +
@@ -90,11 +90,7 @@ console.clear()
 rm('../dist')
 
 const buildVersion = async () => {
-  const builds = [
-    build(esm),
-    build(cjs),
-    build(uglifyCjs, true),
-  ]
+  const builds = [build(esm), build(cjs), build(uglifyCjs, true)]
 
   try {
     await Promise.all(builds)

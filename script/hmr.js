@@ -30,7 +30,7 @@ const createReplacePlugin = () => {
   })
 }
 
-async function build (cfg) {
+async function build(cfg) {
   const buildCfg = {
     input: cfg.input,
     plugins: [
