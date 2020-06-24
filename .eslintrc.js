@@ -23,20 +23,19 @@ module.exports = {
       'ObjectExpression > SpreadElement',
       'ObjectPattern > RestElement',
     ],
-    'no-var': 2,
     camelcase: 2,
-    'prefer-const': 2,
     indent: [2, 2],
     semi: [2, 'never'],
-    'no-use-before-define': 2,
-    'newline-before-return': 2,
     eqeqeq: [2, 'allow-null'],
     quotes: ['error', 'single'],
+    'no-var': 2,
+    'prefer-const': 2,
+    'no-use-before-define': 2,
+    'newline-before-return': 2,
     'func-style': [0, 'declaration'],
     'comma-dangle': ['error', 'always-multiline'],
   },
   overrides: [
-    // tests, no restrictions (runs in Node / jest with jsdom)
     {
       files: [
         'script/*',
@@ -44,6 +43,7 @@ module.exports = {
         '.eslintrc.js',
         './babel.config.js',
         'jest.config.js',
+        '**/__tests__/**',
       ],
       rules: {
         'no-restricted-globals': 'off',
