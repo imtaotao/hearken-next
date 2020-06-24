@@ -9,8 +9,8 @@ yarn-error.log*
 test/unit/coverage
 test/e2e/reports
 selenium-debug.log
-dev/
 dist/
+static/lib
 
 # Editor directories and files
 .idea
@@ -26,5 +26,3 @@ coverage
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-
-

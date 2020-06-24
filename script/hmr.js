@@ -1,18 +1,18 @@
 const fs = require('fs')
-const opn = require('opn')
 const path = require('path')
 const rollup = require('rollup')
 const rm = require('rimraf').sync
+const childProcess = require('child_process')
 const replace = require('rollup-plugin-replace')
 const resolve = require('rollup-plugin-node-resolve')
 const typescript = require('rollup-plugin-typescript2')
 
 const packageJSON = require('../package.json')
 const libName = packageJSON.name
-const libDir = path.resolve(__dirname, '../dev/lib')
-const devHtml = path.resolve(__dirname, '../dev/index.html')
+const libDir = path.resolve(__dirname, '../static/lib')
+
 const entryPath = path.resolve(__dirname, '../src/index.ts')
-const outputPath = path.resolve(__dirname, '../dev/lib', `${libName}.js`)
+const outputPath = path.resolve(__dirname, '../static/lib', `${libName}.js`)
 
 const umd = {
   input: entryPath,
@@ -74,10 +74,15 @@ fs.watch(watchFiles, { recursive: true }, () => {
 })
 
 buildVersion()
-console.log('Watching...')
+console.log('Watching src files...')
 
 if (process.argv.includes('-o')) {
-  if (fs.existsSync(devHtml)) {
-    opn(devHtml)
-  }
+  // start dev server...
+  const serverPath = path.join(__dirname, '../static/server.js')
+  childProcess.fork(serverPath, {}, error => {
+    if (error) {
+      console.error('Server start error:', error)
+      process.exit(1)
+    }
+  })
 }
