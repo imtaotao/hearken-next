@@ -1,7 +1,6 @@
 const DOMGlobals = ['window', 'document']
 const NodeGlobals = ['module', 'require']
 
-// eslint-disable-next-line no-restricted-globals
 module.exports = {
   root: true,
   parser: '@typescript-eslint/parser',
@@ -45,9 +44,13 @@ module.exports = {
         'no-restricted-syntax': 'off',
       },
     },
-    // build script
+    // other config files
     {
-      files: ['script/*'],
+      files: [
+        'script/*',
+        'static/*',
+        '.eslintrc.js',
+      ],
       rules: {
         'no-restricted-globals': 'off',
         'no-restricted-syntax': 'off',
