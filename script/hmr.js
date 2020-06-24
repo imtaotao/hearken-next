@@ -14,11 +14,10 @@ const libDir = path.resolve(__dirname, '../static/lib')
 const entryPath = path.resolve(__dirname, '../src/index.ts')
 const outputPath = path.resolve(__dirname, '../static/lib', `${libName}.js`)
 
-const umd = {
+const esm = {
   input: entryPath,
   output: {
-    format: 'umd',
-    name: libName,
+    format: 'esm',
     file: outputPath,
     sourcemap: true,
   },
@@ -57,7 +56,7 @@ rm(libDir)
 
 const buildVersion = async () => {
   try {
-    await build(umd)
+    await build(esm)
   } catch (error) {
     console.error('[HMR BUILD ERROR]: ', error)
     process.exit(1)

@@ -41,9 +41,9 @@ module.exports = {
         'script/*',
         'static/*',
         '.eslintrc.js',
-        './babel.config.js',
         'jest.config.js',
         '**/__tests__/**',
+        './babel.config.js',
       ],
       rules: {
         'no-restricted-globals': 'off',
