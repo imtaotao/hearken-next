@@ -13,12 +13,11 @@
     "esModuleInterop": true,
     "removeComments": false,
     "rootDir": ".",
-    "plugins": [{ "name": "tslint-language-service" }],
+    "declaration": true,
+    "plugins": [{ "name": "tslint-language-service" }]
   },
   "awesomeTypescriptLoaderOptions": {
     "useBabel": true
   },
-  "include": [
-    "src",
-  ]
+  "include": ["src"]
 }
