@@ -20,5 +20,5 @@ app.listen(port, () => {
   if (fs.existsSync(devHtml)) {
     opn(serverIndex)
   }
-  console.log(`Static server staring at: ${serverIndex}`)
+  console.log(`Static server start on: ${serverIndex}`)
 })

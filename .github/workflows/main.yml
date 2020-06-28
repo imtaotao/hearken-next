@@ -1,0 +1,25 @@
+name: main
+
+on:
+  # Trigger the workflow on push or pull request,
+  # but only for the master branch
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+  steps:
+    - name: check out respository
+      uses: actions/checkout@v2
+    - name: test
+      run: yarn && yarn test:cover
+    # user codecov-action
+    - name: report
+      uses: codecov/codecov-action@v1
+      env:
+        CI: true
