@@ -1,7 +1,7 @@
 ## start
 开发
 ```bash
-$ yarn start
+$ yarn dev -o
 ```
 
 打包

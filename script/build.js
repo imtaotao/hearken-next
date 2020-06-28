@@ -13,6 +13,7 @@ const packageJSON = require('../package.json')
 const libName = packageJSON.name
 const entryPath = path.resolve(__dirname, '../src/index.ts')
 const outputPath = filename => path.resolve(__dirname, '../dist', filename)
+const umdLibName = libName.charAt(0).toUpperCase() + libName.slice(1)
 
 const banner =
   '/*!\n' +
@@ -25,8 +26,8 @@ const esm = {
   input: entryPath,
   output: {
     banner,
-    file: outputPath(`${libName}.esm.js`),
     format: 'es',
+    file: outputPath(`${libName}.esm.js`),
   },
 }
 
@@ -34,8 +35,18 @@ const cjs = {
   input: entryPath,
   output: {
     banner,
-    file: outputPath(`${libName}.common.js`),
     format: 'cjs',
+    file: outputPath(`${libName}.common.js`),
+  },
+}
+
+const umd = {
+  input: entryPath,
+  output: {
+    banner,
+    format: 'umd',
+    name: umdLibName,
+    file: outputPath(`${libName}.umd.js`),
   },
 }
 
@@ -43,15 +54,14 @@ const uglifyCjs = {
   input: entryPath,
   output: {
     banner,
+    format: 'umd',
+    name: umdLibName,
     file: outputPath(`${libName}.min.js`),
-    format: 'cjs',
   },
 }
 
 const createReplacePlugin = () => {
-  return replace({
-    __VERSION__: `'${packageJSON.version}'`,
-  })
+  return replace({ __VERSION__: `'${packageJSON.version}'` })
 }
 
 async function build(cfg, isUglify = false) {
@@ -90,7 +100,12 @@ console.clear()
 rm('../dist')
 
 const buildVersion = async () => {
-  const builds = [build(esm), build(cjs), build(uglifyCjs, true)]
+  const builds = [
+    build(esm),
+    build(cjs),
+    build(umd),
+    build(uglifyCjs, true),
+  ]
 
   try {
     await Promise.all(builds)

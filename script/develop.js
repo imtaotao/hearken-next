@@ -24,9 +24,7 @@ const esm = {
 }
 
 const createReplacePlugin = () => {
-  return replace({
-    __VERSION__: `'${packageJSON.version}'`,
-  })
+  return replace({ __VERSION__: `'${packageJSON.version}'` })
 }
 
 async function build(cfg) {
@@ -58,7 +56,7 @@ const buildVersion = async () => {
   try {
     await build(esm)
   } catch (error) {
-    console.error('[HMR BUILD ERROR]: ', error)
+    console.error('[DEVELOP BUILD ERROR]: ', error)
     process.exit(1)
   }
 }

@@ -34,6 +34,14 @@ module.exports = {
     'newline-before-return': 2,
     'func-style': [0, 'declaration'],
     'comma-dangle': ['error', 'always-multiline'],
+    'array-element-newline': ['error', { 'minItems': 3 }],
+    // object line break
+    'object-curly-newline': ['error', {
+      'ObjectPattern': { 'multiline': true, 'minProperties': 2  },
+      'ObjectExpression': { 'multiline': true, 'minProperties': 2 },
+      'ImportDeclaration': { 'multiline': true, 'minProperties': 2 },
+      'ExportDeclaration': { 'multiline': true, 'minProperties': 2 },
+    }],
   },
   overrides: [
     {
@@ -50,6 +58,13 @@ module.exports = {
         'no-restricted-syntax': 'off',
       },
     },
+    {
+      files: ['.eslintrc.js'],
+      rules: {
+        'array-element-newline': ['error', 'consistent'],
+        'object-curly-newline': ['error', { 'consistent': true }],
+      },
+    },
   ],
-  extends: ['plugin:prettier/recommended'],
+  // extends: ['plugin:prettier/recommended'],
 }
