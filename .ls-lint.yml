@@ -1,5 +1,5 @@
 ls:
-  .js: kebab-case
+  .js: camelCase
   .ts: camelCase
   .d.ts: camelCase
   .spec.ts: camelCase | PascalCase
@@ -7,6 +7,8 @@ ls:
 ignore:
   - dist
   - node_modules
+  - coverage
+  - .rts2_cache
   - jest.config.js
   - babel.config.js
   - .eslintrc.js

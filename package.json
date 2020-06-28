@@ -15,6 +15,21 @@
     "test:cover": "jest --coverage",
     "report": "./node_modules/.bin/codecov -f ./coverage/coverage-final.json"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "commit-msg": "node scripts/verifyCommit.js"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "prettier --write"
+    ],
+    "*.ts?(x)": [
+      "eslint",
+      "prettier --parser=typescript --write"
+    ]
+  },
   "author": "Imtaotao, JiangLiruii",
   "license": "MIT",
   "devDependencies": {
@@ -26,6 +41,7 @@
     "@types/jest": "^26.0.0",
     "@typescript-eslint/parser": "^3.2.0",
     "babel-jest": "^26.1.0",
+    "chalk": "^4.1.0",
     "codecov": "^3.7.0",
     "eslint": "^7.2.0",
     "eslint-config-prettier": "^6.11.0",
@@ -35,6 +51,7 @@
     "koa": "^2.13.0",
     "koa-range": "^0.3.0",
     "koa-static": "^5.0.0",
+    "lint-staged": "^10.2.11",
     "opn": "^6.0.0",
     "prettier": "~1.14.0",
     "rimraf": "^3.0.2",
