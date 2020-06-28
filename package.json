@@ -2,8 +2,8 @@
   "name": "hearken",
   "version": "0.0.1",
   "description": "A tiny and beautiful audio library",
-  "main": "./dist/hearken.common.js",
-  "module": "./dist/hearken.esm.js",
+  "main": "index.js",
+  "module": "dist/hearken.esm.js",
   "scripts": {
     "dev": "node ./script/develop.js",
     "build": "node ./script/build.js",

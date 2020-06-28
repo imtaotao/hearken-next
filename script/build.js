@@ -36,7 +36,7 @@ const cjs = {
   output: {
     banner,
     format: 'cjs',
-    file: outputPath(`${libName}.common.js`),
+    file: outputPath(`${libName}.cjs.js`),
   },
 }
 
@@ -60,14 +60,14 @@ const uglifyCjs = {
   },
 }
 
-const createReplacePlugin = () => {
+const createReplacePlugin = isProd => {
   return replace({
-    __DEV__: false,
+    __DEV__: !isProd,
     __VERSION__: `'${packageJSON.version}'`,
   })
 }
 
-async function build(cfg, isUglify = false) {
+async function build(cfg, isProd, isUglify = false) {
   cfg.output.sourcemap = false
 
   const buildCfg = {
@@ -85,7 +85,7 @@ async function build(cfg, isUglify = false) {
         clean: true, // no cache
       }),
       cmd(),
-      createReplacePlugin(),
+      createReplacePlugin(isProd),
     ],
   }
 
@@ -102,12 +102,29 @@ console.clear()
 // Delete old build files
 rm('../dist')
 
+const prodConfig = cfg => {
+  const file = cfg.output.file
+  const basePrefix = file.slice(0, file.length - 2)
+
+  return {
+    input: cfg.input,
+    output: {
+      ...cfg.output,
+      file: `${basePrefix}prod${path.extname(file)}`,
+    },
+  }
+}
+
 const buildVersion = async () => {
   const builds = [
-    build(esm),
-    build(cjs),
-    build(umd),
-    build(uglifyCjs, true),
+    build(esm, false),
+    build(cjs, false),
+    build(umd, false),
+    build(uglifyCjs, false, true),
+    // production version
+    build(prodConfig(esm), true),
+    build(prodConfig(cjs), true),
+    build(prodConfig(umd), true),
   ]
 
   try {

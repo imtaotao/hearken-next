@@ -1,3 +1,4 @@
+index.js
+babel.config.js
 dist/
 static/lib/
-babel.config.js
