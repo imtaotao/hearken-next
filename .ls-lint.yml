@@ -1,0 +1,15 @@
+ls:
+  .js: kebab-case
+  .ts: camelCase
+  .d.ts: camelCase
+  .spec.ts: camelCase | PascalCase
+
+ignore:
+  - dist
+  - node_modules
+  - jest.config.js
+  - babel.config.js
+  - .eslintrc.js
+  - .git
+  - .github
+  - .vscode

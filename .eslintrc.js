@@ -47,8 +47,8 @@ module.exports = {
   overrides: [
     {
       files: [
-        'script/*',
         'static/*',
+        'scripts/*',
         '.eslintrc.js',
         'jest.config.js',
         '**/__tests__/**',

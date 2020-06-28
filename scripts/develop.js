@@ -79,6 +79,11 @@ console.log('Watching src files...')
 if (process.argv.includes('-o')) {
   // start dev server...
   const serverPath = path.join(__dirname, '../static/server.js')
+  if (!fs.existsSync(serverPath)) {
+    console.error('The static server is not fount.')
+    process.exit(1)
+  }
+
   childProcess.fork(serverPath, {}, error => {
     if (error) {
       console.error('Server start error:', error)
