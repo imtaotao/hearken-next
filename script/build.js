@@ -61,7 +61,10 @@ const uglifyCjs = {
 }
 
 const createReplacePlugin = () => {
-  return replace({ __VERSION__: `'${packageJSON.version}'` })
+  return replace({
+    __DEV__: false,
+    __VERSION__: `'${packageJSON.version}'`,
+  })
 }
 
 async function build(cfg, isUglify = false) {
@@ -96,7 +99,7 @@ async function build(cfg, isUglify = false) {
 }
 
 console.clear()
-// delete old build files
+// Delete old build files
 rm('../dist')
 
 const buildVersion = async () => {

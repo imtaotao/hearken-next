@@ -1,2 +1,3 @@
 dist/
 static/lib/
+babel.config.js

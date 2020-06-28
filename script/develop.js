@@ -24,7 +24,10 @@ const esm = {
 }
 
 const createReplacePlugin = () => {
-  return replace({ __VERSION__: `'${packageJSON.version}'` })
+  return replace({
+    __DEV__: true,
+    __VERSION__: `'${packageJSON.version}'`,
+  })
 }
 
 async function build(cfg) {
@@ -49,7 +52,7 @@ async function build(cfg) {
 }
 
 console.clear()
-// delete old build files
+// Delete old build files
 rm(libDir)
 
 const buildVersion = async () => {

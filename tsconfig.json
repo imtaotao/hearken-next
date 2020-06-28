@@ -1,25 +1,24 @@
 {
   "compilerOptions": {
-    "declaration": false,
-    "experimentalDecorators": true,
-    "lib": ["dom", "es2016"],
-    "moduleResolution": "node",
-    "noImplicitAny": false,
-    "noImplicitReturns": true,
-    "removeComments": true,
-    "inlineSourceMap": true,
     "baseUrl": ".",
-    "strictNullChecks": true,
-    "alwaysStrict": true,
-    "allowSyntheticDefaultImports": true,
-    "module": "es6",
-    "target": "es5",
+    "outDir": "tsDist",
+    "sourceMap": false,
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "allowJs": false,
+    "strict": true,
+    "experimentalDecorators": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "removeComments": false,
+    "rootDir": ".",
     "plugins": [{ "name": "tslint-language-service" }],
-    "types": ["node"]
   },
-  "include": ["src"],
-  "exclude": ["node_modules", "dist", "src/__tests__/*/**"],
   "awesomeTypescriptLoaderOptions": {
     "useBabel": true
-  }
+  },
+  "include": [
+    "src",
+  ]
 }

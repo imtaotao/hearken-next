@@ -1,4 +1,4 @@
-// get static resource
+// Get static resource
 export function get(url) {
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest()

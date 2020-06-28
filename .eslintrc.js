@@ -33,6 +33,7 @@ module.exports = {
     'no-use-before-define': 2,
     'newline-before-return': 2,
     'func-style': [0, 'declaration'],
+    'multiline-ternary': ['error', 'always'],
     'comma-dangle': ['error', 'always-multiline'],
     'array-element-newline': ['error', { 'minItems': 3 }],
     // object line break
@@ -66,5 +67,4 @@ module.exports = {
       },
     },
   ],
-  // extends: ['plugin:prettier/recommended'],
 }
