@@ -32,10 +32,9 @@ module.exports = {
     'no-var': 2,
     'prefer-const': 2,
     'no-use-before-define': 2,
-    'newline-before-return': 2,
     'func-style': [0, 'declaration'],
-    'multiline-ternary': ['error', 'always'],
     'comma-dangle': ['error', 'always-multiline'],
+    'multiline-ternary': ['error', 'always-multiline'],
     'array-element-newline': ['error', { minItems: 3 }],
     // object line break
     'object-curly-newline': [
@@ -43,8 +42,6 @@ module.exports = {
       {
         ObjectPattern: { multiline: true, minProperties: 2 },
         ObjectExpression: { multiline: true, minProperties: 2 },
-        ImportDeclaration: { multiline: true, minProperties: 2 },
-        ExportDeclaration: { multiline: true, minProperties: 2 },
       },
     ],
   },

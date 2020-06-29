@@ -10,7 +10,7 @@
     "server": "node ./static/server.js",
     "lint": "eslint --ext .ts src/**",
     "ls-lint": "ls-lint",
-    "format": "prettier --write --parser typescript \"src/*.ts?(x)\"",
+    "format": "prettier --write --parser typescript \"src/**/*.ts?(x)\"",
     "test": "jest",
     "test:cover": "jest --coverage",
     "report": "./node_modules/.bin/codecov -f ./coverage/coverage-final.json"
@@ -44,8 +44,6 @@
     "chalk": "^4.1.0",
     "codecov": "^3.7.0",
     "eslint": "^7.2.0",
-    "eslint-config-prettier": "^6.11.0",
-    "eslint-plugin-prettier": "^3.1.4",
     "husky": "^4.2.5",
     "jest": "^26.1.0",
     "koa": "^2.13.0",
