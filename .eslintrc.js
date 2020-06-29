@@ -16,12 +16,13 @@ module.exports = {
     ],
     // most of the codebase are expected to be env agnostic
     'no-restricted-globals': ['error', ...DOMGlobals, ...NodeGlobals],
-    // since we target ES2015 for baseline support, we need to forbid object
-    // rest spread usage (both assign and destructure)
+    // forbidden to use export default
     'no-restricted-syntax': [
       'error',
-      'ObjectExpression > SpreadElement',
-      'ObjectPattern > RestElement',
+      {
+        selector: 'ExportDefaultDeclaration',
+        message: 'Forbidden to use export default.',
+      },
     ],
     camelcase: 2,
     indent: [2, 2],
@@ -35,14 +36,17 @@ module.exports = {
     'func-style': [0, 'declaration'],
     'multiline-ternary': ['error', 'always'],
     'comma-dangle': ['error', 'always-multiline'],
-    'array-element-newline': ['error', { 'minItems': 3 }],
+    'array-element-newline': ['error', { minItems: 3 }],
     // object line break
-    'object-curly-newline': ['error', {
-      'ObjectPattern': { 'multiline': true, 'minProperties': 2  },
-      'ObjectExpression': { 'multiline': true, 'minProperties': 2 },
-      'ImportDeclaration': { 'multiline': true, 'minProperties': 2 },
-      'ExportDeclaration': { 'multiline': true, 'minProperties': 2 },
-    }],
+    'object-curly-newline': [
+      'error',
+      {
+        ObjectPattern: { multiline: true, minProperties: 2 },
+        ObjectExpression: { multiline: true, minProperties: 2 },
+        ImportDeclaration: { multiline: true, minProperties: 2 },
+        ExportDeclaration: { multiline: true, minProperties: 2 },
+      },
+    ],
   },
   overrides: [
     {
@@ -63,7 +67,7 @@ module.exports = {
       files: ['.eslintrc.js'],
       rules: {
         'array-element-newline': ['error', 'consistent'],
-        'object-curly-newline': ['error', { 'consistent': true }],
+        'object-curly-newline': ['error', { consistent: true }],
       },
     },
   ],

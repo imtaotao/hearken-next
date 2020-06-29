@@ -2,12 +2,22 @@
 [![Coverage](https://img.shields.io/codecov/c/github/imtaotao/hearken-next/master.svg)](https://codecov.io/github/imtaotao/hearken-next?branch=master)
 
 ## start
-开发
 ```bash
+# development
 $ yarn dev -o
+# build
+$ yarn build
 ```
 
-打包
-```bash
-$ yarn build
+## demo
+```js
+  import Hearken, { player, pitchShift } from '@hearken'
+
+  const manager = new Hearken({})
+  manager.on('connect', () => {
+    manager.connect(player)
+    manager.connect(pitchShift)
+  })
+
+  manager.nodes.player.start()
 ```
