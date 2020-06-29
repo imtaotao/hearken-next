@@ -100,7 +100,7 @@ async function build(cfg, isProd, isUglify = false) {
 
 console.clear()
 // Delete old build files
-rm('../dist')
+rm(path.resolve(__dirname, '../dist'))
 
 const prodConfig = cfg => {
   const file = cfg.output.file
