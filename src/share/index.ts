@@ -2,8 +2,6 @@ export const EMPTY_OBJ: { readonly [key: string]: any } = __DEV__
   ? Object.freeze({})
   : {}
 
-export const EMPTY_ARR: [] = []
-
 export const NOOP = () => {}
 
 export function warn(message: string, isWarning?: boolean) {
@@ -21,7 +19,7 @@ export function assert(condition: boolean, error: string) {
   if (!condition) warn(error)
 }
 
-export function isEmpty(val: unknown) {
+export function isVoid(val: unknown) {
   return val === null || val === undefined
 }
 
@@ -46,10 +44,6 @@ export function once<T extends (...args: Array<any>) => any>(fn: T) {
   }
   return wrap as T
 }
-
-const b = once(function(b: number) {
-  return b + ''
-})
 
 export function mapObject<T, K extends (key: keyof T, val: unknown) => any>(
   obj: T,
