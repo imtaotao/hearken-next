@@ -32,7 +32,6 @@ module.exports = {
     'no-var': 2,
     'prefer-const': 2,
     'no-use-before-define': 2,
-    'newline-before-return': 2,
     'func-style': [0, 'declaration'],
     'multiline-ternary': ['error', 'always'],
     'comma-dangle': ['error', 'always-multiline'],
