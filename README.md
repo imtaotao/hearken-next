@@ -14,10 +14,22 @@ $ yarn build
   import Hearken, { player, pitchShift } from '@hearken'
 
   const manager = new Hearken({})
-  manager.on('connect', () => {
+
+  // inject plugin nodes
+  manager.connect.on(() => {
     manager.connect(player)
     manager.connect(pitchShift)
   })
 
-  manager.nodes.player.start()
+  // load audio source
+  manager.add('xxx.mp3')
+
+  // play music
+  if (manager.loaded()) {
+    manager.plugins.player.start()
+  } else {
+    manager.loaded.on(() => {
+      manager.plugins.player.start()
+    })
+  }
 ```
