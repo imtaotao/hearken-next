@@ -1,5 +1,4 @@
 import { eventEmitter } from '../share/eventEmitter'
-import { doesNotMatch } from 'assert'
 
 describe('test EventEmitter', () => {
   test('test "on" functionality', done => {
@@ -25,30 +24,30 @@ describe('test EventEmitter', () => {
     }, 1000)
   })
   test('remove error eventName', () => {
-    expect(eventEmitter.remove('test', () => {})).toEqual(false)
+    expect(eventEmitter.remove('test eventName', () => {})).toEqual(false)
   })
   test('remove error fn', () => {
-    eventEmitter.on('test', () => {})
-    expect(eventEmitter.remove('test', () => {})).toEqual(false)
+    eventEmitter.on('test fn', () => {})
+    expect(eventEmitter.remove('test fn', () => {})).toEqual(false)
   })
   test('test "remove" functionality', () => {
     const test1 = () => {}
     const test2 = () => {}
-    eventEmitter.on('test', test1)
-    eventEmitter.on('test', test2)
-    expect(eventEmitter.emit('test')).toEqual(true)
-    expect(eventEmitter.remove('test', test1)).toEqual(true)
-    expect(eventEmitter.emit('test')).toEqual(true)
-    expect(eventEmitter.remove('test', test2)).toEqual(true)
-    expect(eventEmitter.emit('test')).toEqual(false)
+    eventEmitter.on('test remove', test1)
+    eventEmitter.on('test remove', test2)
+    expect(eventEmitter.emit('test remove')).toEqual(true)
+    expect(eventEmitter.remove('test remove', test1)).toEqual(true)
+    expect(eventEmitter.emit('test remove')).toEqual(true)
+    expect(eventEmitter.remove('test remove', test2)).toEqual(true)
+    expect(eventEmitter.emit('test remove')).toEqual(false)
   })
   test('test "removeAll" functionality', () => {
     const test1 = () => {}
     const test2 = () => {}
-    eventEmitter.on('test', test1)
-    eventEmitter.on('test', test2)
-    expect(eventEmitter.emit('test')).toEqual(true)
-    expect(eventEmitter.removeAll('test')).toEqual(true)
-    expect(eventEmitter.emit('test')).toEqual(false)
+    eventEmitter.on('test removeAll', test1)
+    eventEmitter.on('test removeAll', test2)
+    expect(eventEmitter.emit('test removeAll')).toEqual(true)
+    expect(eventEmitter.removeAll('test removeAll')).toEqual(true)
+    expect(eventEmitter.emit('test removeAll')).toEqual(false)
   })
 })
