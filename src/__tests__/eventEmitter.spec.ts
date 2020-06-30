@@ -14,9 +14,7 @@ describe('test EventEmitter', () => {
     eventEmitter.emit('jest')
   })
   test('test "once" functionality', done => {
-    eventEmitter.once('once', () => {
-      console.log('once')
-    })
+    eventEmitter.once('once', () => {})
     expect(eventEmitter.emit('once')).toEqual(true)
     setTimeout(() => {
       expect(eventEmitter.emit('once')).toEqual(false)

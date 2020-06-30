@@ -42,7 +42,6 @@ class EventEmitter {
     if (!~fnIndex) {
       return false
     }
-    console.log(this.liseners[eventName])
     currentListeners.splice(fnIndex, 1)
     return true
   }
