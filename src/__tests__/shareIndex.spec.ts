@@ -9,25 +9,25 @@ import {
   once,
   mapObject,
   EMPTY_OBJ,
-} from '../share/index'
+} from '../shared/index'
 
-describe('utils', () => {
+describe('test utils methods', () => {
   beforeEach(() => {
     console.log = NOOP
     console.warn = NOOP
   })
 
-  test('warn', () => {
+  test('test "warn" functionality', () => {
     expect(() => warn('')).toThrow()
     expect(noThrow(() => warn('', true))).toBe(true)
   })
 
-  test('assert', () => {
+  test('test "assert" functionality', () => {
     expect(() => assert(false, '')).toThrow()
     expect(noThrow(() => assert(true, ''))).toBe(true)
   })
 
-  test('isVoid', () => {
+  test('test "isVoid" functionality', () => {
     expect(isVoid(null)).toBe(true)
     expect(isVoid(undefined)).toBe(true)
     expect(isVoid(false)).toBe(false)
@@ -35,7 +35,7 @@ describe('utils', () => {
     expect(isVoid(0)).toBe(false)
   })
 
-  test('remove', () => {
+  test('test "remove" functionality', () => {
     const list = [1, 2, 3]
     remove(list, 3)
     expect(list).toEqual([1, 2])
@@ -43,7 +43,7 @@ describe('utils', () => {
     expect(list).toEqual([1, 2])
   })
 
-  test('toNumber', () => {
+  test('test "toNumber" functionality', () => {
     expect(toNumber(1)).toBe(1)
     expect(toNumber(1.0)).toBe(1)
     expect(toNumber(1.1)).toBe(1.1)
@@ -54,7 +54,7 @@ describe('utils', () => {
     expect(toNumber('')).toBe('')
   })
 
-  test('once', () => {
+  test('test "once" functionality', () => {
     const fnSpy = jest.fn()
     const fn = once(fnSpy)
     fn(1, 2)
@@ -69,7 +69,7 @@ describe('utils', () => {
     checkCtx.call(ctx)
   })
 
-  test('mapObject', () => {
+  test('test "mapObject" functionality', () => {
     const obj = {
       a: 1,
       b: 2,
@@ -81,7 +81,7 @@ describe('utils', () => {
     })
   })
 
-  test('EMPTY_OBJ', () => {
+  test('test "EMPTY_OBJ" object', () => {
     expect(EMPTY_OBJ).toEqual({})
     expect(() => ((EMPTY_OBJ as { a: number }).a = 1)).toThrow()
   })
