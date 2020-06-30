@@ -7,16 +7,16 @@ export const NOOP = () => {}
 export function warn(message: string, isWarning?: boolean) {
   message = `\n[Hearken warning]: ${message}\n\n`
   if (isWarning) {
-    if (__DEV__) {
-      console.warn(message)
-    }
+    if (__DEV__) console.warn(message)
     return
   }
   throw new Error(message)
 }
 
 export function assert(condition: boolean, error: string) {
-  if (!condition) warn(error)
+  if (!condition) {
+    if (__DEV__) warn(error)
+  }
 }
 
 export function isVoid(val: unknown) {

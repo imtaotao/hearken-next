@@ -26,6 +26,7 @@ const esm = {
 const createReplacePlugin = () => {
   return replace({
     __DEV__: true,
+    __TEST__: false,
     __VERSION__: `'${packageJSON.version}'`,
   })
 }

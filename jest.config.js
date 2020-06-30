@@ -24,9 +24,7 @@ module.exports = {
   coverageDirectory: 'coverage',
 
   // An array of regexp pattern strings used to skip coverage collection
-  // coveragePathIgnorePatterns: [
-  //   "/node_modules/"
-  // ],
+  coveragePathIgnorePatterns: ['/node_modules/', 'src/testUtils.ts'],
 
   // Indicates which provider should be used to instrument code for coverage
   coverageProvider: 'v8',
@@ -60,6 +58,7 @@ module.exports = {
   // A set of global variables that need to be available in all test environments
   globals: {
     __DEV__: true,
+    __TEST__: true,
     __VERSION__: require('./package.json').version,
   },
 
