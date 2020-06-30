@@ -17,7 +17,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Build and Test
+      - name: Test cover
         run: yarn && yarn test:cover
 
       # user codecov-action

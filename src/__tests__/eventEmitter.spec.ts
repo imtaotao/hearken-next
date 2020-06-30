@@ -1,6 +1,8 @@
-import { eventEmitter } from '../share/eventEmitter'
+import { EventEmitter } from '../shared/eventEmitter'
 
 describe('test EventEmitter', () => {
+  const eventEmitter = new EventEmitter()
+
   test('test "on" functionality', done => {
     let counter = 0
     eventEmitter.on('jest', () => {
@@ -13,6 +15,7 @@ describe('test EventEmitter', () => {
     eventEmitter.emit('jest')
     eventEmitter.emit('jest')
   })
+
   test('test "once" functionality', done => {
     eventEmitter.once('once', () => {})
     expect(eventEmitter.emit('once')).toEqual(true)
@@ -21,13 +24,16 @@ describe('test EventEmitter', () => {
       done()
     }, 1000)
   })
+
   test('remove error eventName', () => {
     expect(eventEmitter.remove('test eventName', () => {})).toEqual(false)
   })
+
   test('remove error fn', () => {
     eventEmitter.on('test fn', () => {})
     expect(eventEmitter.remove('test fn', () => {})).toEqual(false)
   })
+
   test('test "remove" functionality', () => {
     const test1 = () => {}
     const test2 = () => {}
@@ -39,6 +45,7 @@ describe('test EventEmitter', () => {
     expect(eventEmitter.remove('test remove', test2)).toEqual(true)
     expect(eventEmitter.emit('test remove')).toEqual(false)
   })
+
   test('test "removeAll" functionality', () => {
     const test1 = () => {}
     const test2 = () => {}

@@ -1,5 +1,13 @@
-class EventEmitter {
+export class EventEmitter {
   private liseners: { [eventName: string]: Function[] } = {}
+
+  private checkListenerEmpty(listeners: any[]) {
+    if (!listeners || listeners.length === 0) {
+      return true
+    }
+    return false
+  }
+
   on(eventName: string, callback: Function) {
     if (this.liseners[eventName]) {
       this.liseners[eventName].push(callback)
@@ -15,12 +23,7 @@ class EventEmitter {
     }
     this.on(eventName, callOnce)
   }
-  private checkListenerEmpty(listeners: any[]) {
-    if (!listeners || listeners.length === 0) {
-      return true
-    }
-    return false
-  }
+
   emit(eventName: string, ...data: any[]) {
     const currentListeners = this.liseners[eventName]
     if (this.checkListenerEmpty(currentListeners)) {
@@ -33,6 +36,7 @@ class EventEmitter {
     })
     return true
   }
+
   remove(eventName: string, fn: Function) {
     const currentListeners = this.liseners[eventName]
     if (this.checkListenerEmpty(currentListeners)) {
@@ -45,10 +49,9 @@ class EventEmitter {
     currentListeners.splice(fnIndex, 1)
     return true
   }
+
   removeAll(eventName: string) {
     this.liseners[eventName] = []
     return true
   }
 }
-
-export const eventEmitter = new EventEmitter()

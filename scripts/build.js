@@ -63,6 +63,7 @@ const uglifyCjs = {
 const createReplacePlugin = isProd => {
   return replace({
     __DEV__: !isProd,
+    __TEST__: false,
     __VERSION__: `'${packageJSON.version}'`,
   })
 }
