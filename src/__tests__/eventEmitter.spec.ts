@@ -1,58 +1,77 @@
 import { EventEmitter } from '../shared/eventEmitter'
-
+class Manager {
+  connect: EventEmitter
+}
 describe('test EventEmitter', () => {
-  const eventEmitter = new EventEmitter()
+  let manager: Manager
+  beforeEach(() => {
+    class Manager {
+      connect = new EventEmitter()
+    }
+    manager = new Manager()
+  })
 
   test('test "on" functionality', done => {
     let counter = 0
-    eventEmitter.on('jest', () => {
+    manager.connect.on(() => {
       counter++
       // test repeatibility
       if (counter === 2) {
         done()
       }
     })
-    eventEmitter.emit('jest')
-    eventEmitter.emit('jest')
+    manager.connect.emit()
+    manager.connect.emit()
   })
 
   test('test "once" functionality', done => {
-    eventEmitter.once('once', () => {})
-    expect(eventEmitter.emit('once')).toEqual(true)
+    manager.connect.once(() => {})
+    expect(manager.connect.emit()).toEqual(true)
     setTimeout(() => {
-      expect(eventEmitter.emit('once')).toEqual(false)
+      expect(manager.connect.emit()).toEqual(false)
       done()
     }, 1000)
   })
 
   test('remove error eventName', () => {
-    expect(eventEmitter.remove('test eventName', () => {})).toEqual(false)
+    expect(manager.connect.remove(() => {})).toEqual(false)
   })
 
   test('remove error fn', () => {
-    eventEmitter.on('test fn', () => {})
-    expect(eventEmitter.remove('test fn', () => {})).toEqual(false)
+    manager.connect.on(() => {})
+    expect(manager.connect.remove(() => {})).toEqual(false)
   })
 
   test('test "remove" functionality', () => {
     const test1 = () => {}
     const test2 = () => {}
-    eventEmitter.on('test remove', test1)
-    eventEmitter.on('test remove', test2)
-    expect(eventEmitter.emit('test remove')).toEqual(true)
-    expect(eventEmitter.remove('test remove', test1)).toEqual(true)
-    expect(eventEmitter.emit('test remove')).toEqual(true)
-    expect(eventEmitter.remove('test remove', test2)).toEqual(true)
-    expect(eventEmitter.emit('test remove')).toEqual(false)
+    manager.connect.on(test1)
+    manager.connect.on(test2)
+    expect(manager.connect.emit()).toEqual(true)
+    expect(manager.connect.remove(test1)).toEqual(true)
+    expect(manager.connect.emit()).toEqual(true)
+    expect(manager.connect.remove(test2)).toEqual(true)
+    expect(manager.connect.emit()).toEqual(false)
   })
 
   test('test "removeAll" functionality', () => {
     const test1 = () => {}
     const test2 = () => {}
-    eventEmitter.on('test removeAll', test1)
-    eventEmitter.on('test removeAll', test2)
-    expect(eventEmitter.emit('test removeAll')).toEqual(true)
-    expect(eventEmitter.removeAll('test removeAll')).toEqual(true)
-    expect(eventEmitter.emit('test removeAll')).toEqual(false)
+    manager.connect.on(test1)
+    manager.connect.on(test2)
+    expect(manager.connect.emit()).toEqual(true)
+    expect(manager.connect.removeAll()).toEqual(true)
+    expect(manager.connect.emit()).toEqual(false)
+  })
+  test('test callback fn parameter', done => {
+    const testParam1 = 'ok'
+    const testParam2 = 1
+    const test = (param1: string, param2: number) => {
+      expect(param1).toEqual(testParam1)
+      expect(param2).toEqual(testParam2)
+      done()
+    }
+    manager.connect.on(test)
+    expect(manager.connect.emit(testParam1, testParam2)).toEqual(true)
   })
 })

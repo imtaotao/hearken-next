@@ -1,35 +1,31 @@
+type listenerType = Set<Function>
 export class EventEmitter {
-  private liseners: { [eventName: string]: Function[] } = {}
+  private liseners: listenerType = new Set()
 
-  private checkListenerEmpty(listeners: any[]) {
-    if (!listeners || listeners.length === 0) {
+  private checkListenerEmpty() {
+    if (!this.liseners || this.liseners.size === 0) {
       return true
     }
     return false
   }
 
-  on(eventName: string, callback: Function) {
-    if (this.liseners[eventName]) {
-      this.liseners[eventName].push(callback)
-    } else {
-      this.liseners[eventName] = [callback]
-    }
+  on(callback: Function) {
+    this.liseners.add(callback)
   }
 
-  once(eventName: string, callback: Function) {
+  once(callback: Function) {
     const callOnce = () => {
       callback()
-      this.remove(eventName, callOnce)
+      this.remove(callOnce)
     }
-    this.on(eventName, callOnce)
+    this.on(callOnce)
   }
 
-  emit(eventName: string, ...data: any[]) {
-    const currentListeners = this.liseners[eventName]
-    if (this.checkListenerEmpty(currentListeners)) {
+  emit(...data: any[]) {
+    if (this.checkListenerEmpty()) {
       return false
     }
-    this.liseners[eventName].map(item => {
+    this.liseners.forEach(item => {
       setTimeout(() => {
         item(...data)
       })
@@ -37,21 +33,15 @@ export class EventEmitter {
     return true
   }
 
-  remove(eventName: string, fn: Function) {
-    const currentListeners = this.liseners[eventName]
-    if (this.checkListenerEmpty(currentListeners)) {
+  remove(fn: Function) {
+    if (this.checkListenerEmpty()) {
       return false
     }
-    const fnIndex = currentListeners.indexOf(fn)
-    if (!~fnIndex) {
-      return false
-    }
-    currentListeners.splice(fnIndex, 1)
-    return true
+    return this.liseners.delete(fn)
   }
 
-  removeAll(eventName: string) {
-    this.liseners[eventName] = []
+  removeAll() {
+    this.liseners = new Set()
     return true
   }
 }
