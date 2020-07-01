@@ -56,7 +56,7 @@ export class EventEmitter {
 
 const installMethods = ['on', 'once', 'emit', 'remove', 'removeAll']
 
-export function wrapIt<T>(obj: T): T & EventEmitter {
+export function extendEvent<T>(obj: T): T & EventEmitter {
   const undertake = {}
   const bus = new EventEmitter()
   const proto = Reflect.getPrototypeOf(bus)
