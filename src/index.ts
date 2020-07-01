@@ -1,6 +1,5 @@
-export const sum = (num1: number, num2: number) => {
-  if (__DEV__) {
-    console.log('test')
-  }
-  return num1 + num2
-}
+import { EventEmitter } from './shared/eventEmitter'
+
+const Hearken = { Event: EventEmitter }
+
+export { EventEmitter as Event, Hearken as default }

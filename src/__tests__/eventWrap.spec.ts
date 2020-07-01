@@ -1,13 +1,14 @@
-import { EventEmitter } from '../shared/eventEmitter'
+import { wrapIt, EventEmitter } from '../shared/eventEmitter'
 
 class Manager {
   connect: EventEmitter
 }
-describe('test EventEmitter', () => {
+
+describe('test wrapit EventEmitter', () => {
   let manager: Manager
   beforeEach(() => {
     class Manager {
-      connect = new EventEmitter()
+      connect = wrapIt(function() {})
     }
     manager = new Manager()
   })
