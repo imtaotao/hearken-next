@@ -35,7 +35,6 @@ module.exports = {
     'func-style': [0, 'declaration'],
     'comma-dangle': ['error', 'always-multiline'],
     'multiline-ternary': ['error', 'always-multiline'],
-    'array-element-newline': ['error', { minItems: 4 }],
     // object line break
     'object-curly-newline': [
       'error',
