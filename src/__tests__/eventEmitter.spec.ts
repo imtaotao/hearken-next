@@ -12,24 +12,21 @@ describe('test EventEmitter', () => {
     manager = new Manager()
   })
 
-  test('test "on" functionality', done => {
+  test('test "on" functionality', () => {
     let counter = 0
     manager.connect.on(() => {
       counter++
-      // test repeatibility
-      if (counter === 2) {
-        done()
-      }
     })
     manager.connect.emit()
     manager.connect.emit()
+    expect(counter).toBe(2)
   })
 
   test('test "once" functionality', done => {
     manager.connect.once(() => {})
-    expect(manager.connect.emit()).toEqual(true)
+    expect(manager.connect.emitAsync()).toEqual(true)
     setTimeout(() => {
-      expect(manager.connect.emit()).toEqual(false)
+      expect(manager.connect.emitAsync()).toEqual(false)
       done()
     }, 1000)
   })
@@ -73,6 +70,6 @@ describe('test EventEmitter', () => {
       done()
     }
     manager.connect.on(test)
-    expect(manager.connect.emit(testParam1, testParam2)).toEqual(true)
+    expect(manager.connect.emitAsync(testParam1, testParam2)).toEqual(true)
   })
 })

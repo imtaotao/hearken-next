@@ -1,4 +1,3 @@
-const DOMGlobals = ['window', 'document']
 const NodeGlobals = ['module', 'require']
 
 module.exports = {
@@ -15,7 +14,7 @@ module.exports = {
       { varsIgnorePattern: '.*', args: 'after-used', argsIgnorePattern: '^_' },
     ],
     // most of the codebase are expected to be env agnostic
-    'no-restricted-globals': ['error', ...DOMGlobals, ...NodeGlobals],
+    'no-restricted-globals': ['error', ...NodeGlobals],
     // forbidden to use export default
     'no-restricted-syntax': [
       'error',

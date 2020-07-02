@@ -8,6 +8,7 @@ import {
   toNumber,
   once,
   mapObject,
+  isAudioBuffer,
   EMPTY_OBJ,
 } from '../shared/index'
 
@@ -79,6 +80,11 @@ describe('test utils methods', () => {
       a: 'a_1',
       b: 'b_2',
     })
+  })
+
+  test('test "isAudioBuffer" functionality', () => {
+    expect(isAudioBuffer(1)).toBe(false)
+    expect(isAudioBuffer('')).toBe(false)
   })
 
   test('test "EMPTY_OBJ" object', () => {

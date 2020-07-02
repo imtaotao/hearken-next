@@ -5,6 +5,7 @@
   "main": "index.js",
   "module": "dist/hearken.esm.js",
   "scripts": {
+    "kill": "pkill node",
     "dev": "node ./scripts/develop.js",
     "build": "node ./scripts/build.js",
     "server": "node ./static/server.js",
