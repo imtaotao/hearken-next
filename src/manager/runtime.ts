@@ -1,1 +1,1 @@
-console.log('runtime')
+export class Manager {}

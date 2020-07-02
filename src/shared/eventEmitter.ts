@@ -1,5 +1,10 @@
 import { assert } from './index'
 
+// This module is a basic module,
+// the other module depend on it
+// and will be export to external use,
+// so, we need check parameter.
+
 type listenerType = Set<Function>
 
 const assertListener = (liseners: listenerType) =>
