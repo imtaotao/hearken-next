@@ -74,14 +74,9 @@ export class EventEmitter {
   }
 }
 
-const INSTALL_METHODS = [
-  'on',
-  'once',
-  'emit',
-  'emitAsync',
-  'remove',
-  'removeAll',
-]
+const INSTALL_METHODS = Object.getOwnPropertyNames(
+  EventEmitter.prototype,
+).filter(key => key !== 'constructor')
 
 export function extendEvent<T>(obj: T): T & EventEmitter {
   const undertake = {}

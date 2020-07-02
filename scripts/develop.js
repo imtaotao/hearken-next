@@ -61,7 +61,6 @@ const buildVersion = async () => {
     await build(esm)
   } catch (error) {
     console.error('[DEVELOP BUILD ERROR]: ', error)
-    process.exit(1)
   }
 }
 

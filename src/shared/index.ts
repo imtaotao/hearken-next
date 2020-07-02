@@ -23,6 +23,10 @@ export function isVoid(val: unknown) {
   return val === null || val === undefined
 }
 
+export function isAudioBuffer(val: unknown) {
+  return Object.prototype.toString.call(val) === '[object AudioBuffer]'
+}
+
 export function remove<T>(list: Array<T>, el: T) {
   const i = list.indexOf(el)
   if (~i) {
