@@ -5,7 +5,7 @@ import { extendEvent } from '../shared/eventEmitter'
 interface ManagerOptions {}
 
 type Model = 'link' | 'buffer' | 'void'
-type PluginNode = () => void
+type PluginNode = (manager: Manager) => any
 
 // Need filter manager options
 function checkOptions(options: ManagerOptions) {
@@ -14,7 +14,7 @@ function checkOptions(options: ManagerOptions) {
 
 // Connect audio node
 function connect(this: Manager, node: PluginNode) {
-  console.log(node)
+  this.nodes.add(node(this))
 }
 
 // Close audio context, free up resources
@@ -29,6 +29,10 @@ function close(this: Manager): Promise<void> {
   }
   return audioCtx.close().then(() => {
     audioCtx.$isClosed = true
+
+    // clear all nodes
+    this.nodes.clear()
+
     // emit close event
     this.close.emit()
   })
@@ -53,7 +57,7 @@ export class Manager {
   private $options: ManagerOptions
   public $model: Model = 'void'
   public $loaded = false
-  public nodes = new Set<Function>()
+  public nodes = new Set<any>()
   public $plugins: { [key: string]: any } = {}
   public $context = createContext(this)
 

@@ -1,10 +1,10 @@
 import { createAudioContext } from '../shared/audio'
 
-export function createContext(replyon: Object) {
-  const audioCtx = createAudioContext(replyon.constructor)
+export function createContext(manager: Object) {
+  const audioCtx = createAudioContext(manager.constructor)
 
   return {
+    manager,
     audioCtx,
-    manager: replyon,
   }
 }
