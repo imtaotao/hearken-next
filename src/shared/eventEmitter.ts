@@ -5,19 +5,22 @@ type listenerType = Set<Function>
 const assertListener = (liseners: listenerType) =>
   !liseners || liseners.size === 0
 
+const assertCallback = (fn: Function) =>
+  assert(typeof fn === 'function', '`Callback` must be a function')
+
 export class EventEmitter {
   _liseners: listenerType = new Set()
 
   on(callback: Function) {
     if (__DEV__) {
-      assert(typeof callback === 'function', '`Callback` must be a function')
+      assertCallback(callback)
     }
     this._liseners.add(callback)
   }
 
   once(callback: Function) {
     if (__DEV__) {
-      assert(typeof callback === 'function', '`Callback` must be a function')
+      assertCallback(callback)
     }
     const callOnce = () => {
       callback()
@@ -27,6 +30,16 @@ export class EventEmitter {
   }
 
   emit(...data: any[]) {
+    if (__DEV__) {
+      if (assertListener(this._liseners)) {
+        return false
+      }
+    }
+    this._liseners.forEach(fn => fn(...data))
+    return true
+  }
+
+  emitAsync(...data: any[]) {
     if (__DEV__) {
       if (assertListener(this._liseners)) {
         return false
@@ -54,7 +67,14 @@ export class EventEmitter {
   }
 }
 
-const installMethods = ['on', 'once', 'emit', 'remove', 'removeAll']
+const INSTALL_METHODS = [
+  'on',
+  'once',
+  'emit',
+  'emitAsync',
+  'remove',
+  'removeAll',
+]
 
 export function extendEvent<T>(obj: T): T & EventEmitter {
   const undertake = {}
@@ -66,7 +86,7 @@ export function extendEvent<T>(obj: T): T & EventEmitter {
     ;(obj as any)[key] = (bus as any)[key]
   }
 
-  for (const key of installMethods) {
+  for (const key of INSTALL_METHODS) {
     ;(undertake as any)[key] = (proto as any)[key]
   }
 
