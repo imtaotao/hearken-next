@@ -7,6 +7,8 @@ import { assert } from './index'
 
 type listenerType = Set<Function>
 
+export interface ExtendEvent {}
+
 const assertListener = (liseners: listenerType) =>
   !liseners || liseners.size === 0
 

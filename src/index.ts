@@ -1,5 +1,9 @@
+import { Manager } from './manager/runtime'
 import { EventEmitter } from './shared/eventEmitter'
 
-const Hearken = { Event: EventEmitter }
+const Hearken = {
+  Manager,
+  Event: EventEmitter,
+}
 
-export { EventEmitter as Event, Hearken as default }
+export { Manager, EventEmitter as Event, Hearken as default }
