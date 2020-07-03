@@ -9,7 +9,7 @@
     "dev": "node ./scripts/develop.js",
     "build": "node ./scripts/build.js",
     "server": "node ./static/server.js",
-    "lint": "eslint --ext .ts src/**",
+    "lint": "eslint --ext .ts src/**/*",
     "ls-lint": "ls-lint",
     "format": "prettier --write --parser typescript \"src/**/*.ts?(x)\"",
     "test": "jest",

@@ -1,5 +1,5 @@
+import { assert } from '../shared/index'
 import { createContext } from './context'
-import { isVoid, assert } from '../shared/index'
 import { extendEvent } from '../shared/eventEmitter'
 
 interface ManagerOptions {}
