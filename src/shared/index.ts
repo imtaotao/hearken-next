@@ -27,11 +27,19 @@ export function isAudioBuffer(val: unknown) {
   return Object.prototype.toString.call(val) === '[object AudioBuffer]'
 }
 
+export function isAudioNode(val: AudioNode) {
+  return /\[object\s{1}.*Node\]/.test(Object.prototype.toString.call(val))
+}
+
 export function remove<T>(list: Array<T>, el: T) {
   const i = list.indexOf(el)
   if (~i) {
     list.splice(i, 1)
   }
+}
+
+export function last<T>(list: Array<T>, i = 1) {
+  return list[list.length - i]
 }
 
 export function toNumber(val: any) {
