@@ -1,11 +1,11 @@
 import { createContext } from './context'
-import { assert, isAudioNode } from '../shared/index'
+import { last, assert, isAudioNode } from '../shared/index'
 import { extendEvent } from '../shared/eventEmitter'
 
 interface ManagerOptions {}
 
 type Model = 'link' | 'buffer' | 'void'
-type AudioNodeFn = (prevAudioNode: AudioNode | null) => AudioNode
+type AudioNodeFn = (prevAudioNode: AudioNode | null) => AudioNode | AudioNode[]
 type AudioNodeWrap = (context: Manager['$context']) => AudioNodeFn
 
 // Need filter manager options
@@ -92,11 +92,24 @@ function connect(this: Manager) {
   this.connect.emit()
   this.nodes.forEach((fn) => {
     const curNode = fn(prevNode)
-    if (__DEV__) {
-      assert(isAudioNode(curNode), 'Should return an audioNode.')
+
+    if (Array.isArray(curNode)) {
+      if (__DEV__) {
+        curNode.forEach((n) => {
+          assert(isAudioNode(n), 'Should return an audioNode.')
+        })
+      }
+
+      prevNode = last(curNode)
+      nodes.push.apply(nodes, curNode)
+    } else {
+      if (__DEV__) {
+        assert(isAudioNode(curNode), 'Should return an audioNode.')
+      }
+
+      prevNode = curNode
+      nodes.push(curNode)
     }
-    prevNode = curNode
-    nodes.push(curNode)
   })
 
   // connect nodes
