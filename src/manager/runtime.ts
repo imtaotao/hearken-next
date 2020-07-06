@@ -51,7 +51,9 @@ function apply(this: Manager, plugin: Function, ...args: any[]) {
   }
 
   const pluginName = plugin.name
-  this.$plugins[pluginName] = plugin(this, ...args)
+  const res = plugin(this, ...args)
+  this.apply.emit(res)
+  this.$plugins[pluginName] = res
 }
 
 // If the audio source is loaded that's can play
@@ -65,7 +67,10 @@ function registrar(this: Manager, registrar: AudioNodeWrap) {
     assert(typeof registrar === 'function', '`registrar` is not a function.')
   }
 
-  const fn = registrar(this.$context)
+  const wrap = { fn: registrar }
+  this.registrar.emit(wrap)
+  const fn = wrap.fn(this.$context)
+
   if (__DEV__) {
     assert(
       typeof fn === 'function',
@@ -134,11 +139,11 @@ export class Manager {
   public $plugins: { [key: string]: any } = {}
 
   // methods
-  public apply = apply
-  public registrar = registrar
+  public apply = extendEvent(apply)
   public close = extendEvent(close)
   public loaded = extendEvent(loaded)
   public connect = extendEvent(connect)
+  public registrar = extendEvent(registrar)
 
   constructor(options: ManagerOptions) {
     this.$options = checkOptions(options)
