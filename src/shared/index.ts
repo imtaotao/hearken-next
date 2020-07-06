@@ -38,6 +38,10 @@ export function remove<T>(list: Array<T>, el: T) {
   }
 }
 
+export function last<T>(list: Array<T>, i = 1) {
+  return list[list.length - i]
+}
+
 export function toNumber(val: any) {
   const n = parseFloat(val)
   return isNaN(n) ? val : n
