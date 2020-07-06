@@ -17,10 +17,8 @@ export function Long(manager: Manager, options?: StartOptions) {
       assert(typeof url === 'string', 'error')
     }
 
-    options = options || {}
-
-    const audio = (this.el = options.audio || new Audio())
-    if (options.crossOrigin) {
+    const audio = (this.el = options?.audio || new Audio())
+    if (options?.crossOrigin) {
       audio.crossOrigin = options.crossOrigin
     }
     audio.src = url

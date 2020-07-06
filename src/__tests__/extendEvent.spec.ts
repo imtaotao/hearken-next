@@ -8,7 +8,7 @@ describe('test extendEvent EventEmitter', () => {
   let manager: Manager
   beforeEach(() => {
     class Manager {
-      connect = extendEvent(function() {})
+      connect = extendEvent(function () {})
     }
     manager = new Manager()
   })
@@ -23,7 +23,7 @@ describe('test extendEvent EventEmitter', () => {
     expect(counter).toBe(2)
   })
 
-  test('test "once" functionality', done => {
+  test('test "once" functionality', (done) => {
     manager.connect.once(() => {})
     expect(manager.connect.emitAsync()).toEqual(true)
     setTimeout(() => {
@@ -62,7 +62,7 @@ describe('test extendEvent EventEmitter', () => {
     expect(manager.connect.removeAll()).toEqual(true)
     expect(manager.connect.emit()).toEqual(false)
   })
-  test('test callback fn parameter', done => {
+  test('test callback fn parameter', (done) => {
     const testParam1 = 'ok'
     const testParam2 = 1
     const test = (param1: string, param2: number) => {

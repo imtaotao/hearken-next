@@ -64,7 +64,7 @@ describe('test utils methods', () => {
     expect(fnSpy.mock.calls[0]).toEqual([1, 2])
 
     const ctx = {}
-    const checkCtx = once(function() {
+    const checkCtx = once(function () {
       expect(this).toBe(ctx)
     })
     checkCtx.call(ctx)

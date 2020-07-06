@@ -22,7 +22,7 @@ describe('test EventEmitter', () => {
     expect(counter).toBe(2)
   })
 
-  test('test "once" functionality', done => {
+  test('test "once" functionality', (done) => {
     manager.connect.once(() => {})
     expect(manager.connect.emitAsync()).toEqual(true)
     setTimeout(() => {
@@ -61,7 +61,7 @@ describe('test EventEmitter', () => {
     expect(manager.connect.removeAll()).toEqual(true)
     expect(manager.connect.emit()).toEqual(false)
   })
-  test('test callback fn parameter', done => {
+  test('test callback fn parameter', (done) => {
     const testParam1 = 'ok'
     const testParam2 = 1
     const test = (param1: string, param2: number) => {
