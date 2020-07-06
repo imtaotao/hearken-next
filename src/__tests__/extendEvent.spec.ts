@@ -1,4 +1,4 @@
-import { extendEvent, EventEmitter } from '../shared/eventEmitter'
+import { extend, EventEmitter } from '../shared/eventEmitter'
 
 class Manager {
   connect: EventEmitter
@@ -8,7 +8,7 @@ describe('test extendEvent EventEmitter', () => {
   let manager: Manager
   beforeEach(() => {
     class Manager {
-      connect = extendEvent(function () {})
+      connect = extend(function () {})
     }
     manager = new Manager()
   })

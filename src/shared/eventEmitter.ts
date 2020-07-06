@@ -78,7 +78,7 @@ const INSTALL_METHODS = Object.getOwnPropertyNames(
   EventEmitter.prototype,
 ).filter((key) => key !== 'constructor')
 
-export function extendEvent<T>(obj: T): T & EventEmitter {
+export function extend<T>(obj: T): T & EventEmitter {
   const undertake = {}
   const bus = new EventEmitter()
   const proto = Reflect.getPrototypeOf(bus)

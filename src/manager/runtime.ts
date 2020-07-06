@@ -1,6 +1,6 @@
 import { createContext } from './context'
+import { extend } from '../shared/eventEmitter'
 import { last, assert, isAudioNode } from '../shared/index'
-import { extendEvent } from '../shared/eventEmitter'
 
 interface ManagerOptions {}
 
@@ -129,6 +129,15 @@ function connect(this: Manager) {
   this.audioNodes = nodes
 }
 
+function disconnect(this: Manager) {
+  if (this.audioNodes.length > 0) {
+    for (const node of this.audioNodes) {
+      node.disconnect()
+    }
+    this.disconnect.emit()
+  }
+}
+
 export class Manager {
   private $options: ManagerOptions
   public $model: Model = 'void'
@@ -139,11 +148,12 @@ export class Manager {
   public $plugins: { [key: string]: any } = {}
 
   // methods
-  public apply = extendEvent(apply)
-  public close = extendEvent(close)
-  public loaded = extendEvent(loaded)
-  public connect = extendEvent(connect)
-  public registrar = extendEvent(registrar)
+  public apply = extend(apply)
+  public close = extend(close)
+  public loaded = extend(loaded)
+  public connect = extend(connect)
+  public registrar = extend(registrar)
+  public disconnect = extend(disconnect)
 
   constructor(options: ManagerOptions) {
     this.$options = checkOptions(options)
