@@ -1,6 +1,6 @@
 import { assert } from '../shared/index'
 import { Manager } from '../manager/runtime'
-import { extend, ExtendFn } from 'src/shared/eventEmitter'
+import { extend, ExtendEvent } from 'src/shared/eventEmitter'
 
 interface StartOptions {
   loop?: boolean
@@ -13,13 +13,13 @@ interface Player {
   options?: StartOptions
   playing: () => boolean
   el: HTMLAudioElement | null
-  pause: ExtendFn<() => void>
-  close: ExtendFn<() => void>
-  add: ExtendFn<(url: string) => void>
-  play: ExtendFn<() => Promise<boolean>>
-  mute: ExtendFn<(val: boolean) => void>
-  volume: ExtendFn<(val: number) => void>
-  forward: ExtendFn<(val: number) => void>
+  pause: ExtendEvent<() => void>
+  close: ExtendEvent<() => void>
+  add: ExtendEvent<(url: string) => void>
+  play: ExtendEvent<() => Promise<boolean>>
+  mute: ExtendEvent<(val: boolean) => void>
+  volume: ExtendEvent<(val: number) => void>
+  forward: ExtendEvent<(val: number) => void>
 }
 
 // Use audio element load source and control audio behavior
@@ -54,13 +54,13 @@ function close(this: Player) {
 }
 
 function play(this: Player) {
-  if (!this.el || this.playing()) {
-    return Promise.resolve(false)
+  if (this.el && this.playing()) {
+    return this.el.play().then(() => {
+      this.play.emit()
+      return true
+    })
   }
-  return this.el.play().then(() => {
-    this.play.emit()
-    return true
-  })
+  return Promise.resolve(false)
 }
 
 function pause(this: Player) {
