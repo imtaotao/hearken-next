@@ -1,3 +1,4 @@
+import { LONG_PLAYER } from './symbols'
 import { assert } from '../shared/index'
 import { Manager } from '../manager/runtime'
 import { extend, ExtendEvent } from 'src/shared/eventEmitter'
@@ -9,6 +10,7 @@ interface StartOptions {
 }
 
 interface Player {
+  type: Symbol
   manager: Manager
   options?: StartOptions
   playing: () => boolean
@@ -98,6 +100,7 @@ export function Long(manager: Manager, options?: StartOptions): Player {
     options,
     el: null,
     playing,
+    type: LONG_PLAYER,
     add: extend(add),
     mute: extend(mute),
     play: extend(play),

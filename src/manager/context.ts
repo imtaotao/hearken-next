@@ -105,8 +105,8 @@ export function createContext(manager: Manager): Context {
   return {
     manager,
     audioContext,
-    _canplay: false,
     audioNodes: [],
+    _canplay: false,
     nodes: new Set<AudioNodeFn>(),
     canplay: extend(canplay),
     connect: extend(connect),
