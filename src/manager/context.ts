@@ -14,7 +14,7 @@ export interface Context {
   nodes: Set<AudioNodeFn>
   audioContext: ReAudioContext
   close: ExtendFn<Function>
-  canPlay: ExtendFn<Function>
+  canplay: ExtendFn<Function>
   connect: ExtendFn<Function>
   registrar: ExtendFn<Function>
   disconnect: ExtendFn<Function>
@@ -115,7 +115,7 @@ function close(this: Context): Promise<void> {
 
     // Clear all listener
     this.close.removeAll()
-    this.canPlay.removeAll()
+    this.canplay.removeAll()
     this.connect.removeAll()
     this.registrar.removeAll()
     this.disconnect.removeAll()
@@ -123,7 +123,7 @@ function close(this: Context): Promise<void> {
 }
 
 // If the audio source is loaded that's can play
-function canPlay(this: Context) {
+function canplay(this: Context) {
   return this._canplay
 }
 
@@ -138,7 +138,7 @@ export function createContext(manager: Manager): Context {
     nodes: new Set<AudioNodeFn>(),
     audioContext,
     close: extend(close),
-    canPlay: extend(canPlay),
+    canplay: extend(canplay),
     connect: extend(connect),
     registrar: extend(registrar),
     disconnect: extend(disconnect),
