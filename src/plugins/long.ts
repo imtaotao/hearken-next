@@ -13,8 +13,13 @@ interface Player {
   options?: StartOptions
   playing: () => boolean
   el: HTMLAudioElement | null
+  pause: ExtendFn<() => void>
   close: ExtendFn<() => void>
   add: ExtendFn<(url: string) => void>
+  play: ExtendFn<() => Promise<boolean>>
+  mute: ExtendFn<(val: boolean) => void>
+  volume: ExtendFn<(val: number) => void>
+  forward: ExtendFn<(val: number) => void>
 }
 
 // Use audio element load source and control audio behavior
@@ -48,9 +53,22 @@ function close(this: Player) {
   this.close.emit()
 }
 
-function play(this: Player) {}
+function play(this: Player) {
+  if (!this.el || this.playing()) {
+    return Promise.resolve(false)
+  }
+  return this.el.play().then(() => {
+    this.play.emit()
+    return true
+  })
+}
 
-function pause(this: Player) {}
+function pause(this: Player) {
+  if (this.playing()) {
+    this.el?.pause()
+    this.pause.emit()
+  }
+}
 
 function volume(this: Player, val: number) {
   if (__DEV__) {
@@ -75,7 +93,7 @@ function playing(this: Player) {
 }
 
 export function Long(manager: Manager, options?: StartOptions): Player {
-  const Player = {
+  return {
     manager,
     options,
     el: null,
@@ -88,6 +106,4 @@ export function Long(manager: Manager, options?: StartOptions): Player {
     volume: extend(volume),
     forward: extend(forward),
   }
-
-  return Player
 }
