@@ -42,6 +42,10 @@ export function last<T>(list: Array<T>, i = 1) {
   return list[list.length - i]
 }
 
+export function range(min: number, max: number, val: number) {
+  return Math.max(Math.min(val, max), min)
+}
+
 export function toNumber(val: any) {
   const n = parseFloat(val)
   return isNaN(n) ? val : n
