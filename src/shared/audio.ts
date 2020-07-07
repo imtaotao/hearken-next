@@ -3,13 +3,9 @@ const MEDIA_ELEMENT_NODES = new WeakMap<
   MediaElementAudioSourceNode
 >()
 
-export interface ExtendAudioContext {
-  $isClosed: boolean
-}
+export type ReAudioContext = AudioContext & { $isClosed: boolean }
 
-export function createAudioContext(
-  obj: any,
-): AudioContext & ExtendAudioContext {
+export function createAudioContext(obj: any): ReAudioContext {
   if (!obj.$ctx) {
     obj.$ctx = new (window.AudioContext ||
       (window as any).webkitAudioContext ||
