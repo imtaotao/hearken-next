@@ -6,8 +6,7 @@ import { assert } from './index'
 // so, we need check parameter.
 
 type listenerType = Set<Function>
-
-export interface ExtendEvent {}
+export type ExtendFn<T> = T & EventEmitter & { _extend: boolean }
 
 const assertListener = (liseners: listenerType) =>
   !liseners || liseners.size === 0
@@ -78,7 +77,11 @@ const INSTALL_METHODS = Object.getOwnPropertyNames(
   EventEmitter.prototype,
 ).filter((key) => key !== 'constructor')
 
-export function extend<T>(obj: T): T & EventEmitter {
+export function extend<T>(obj: T) {
+  if ((obj as any)._extend) {
+    return obj as ExtendFn<T>
+  }
+
   const undertake = {}
   const bus = new EventEmitter()
   const proto = Reflect.getPrototypeOf(bus)
@@ -95,5 +98,8 @@ export function extend<T>(obj: T): T & EventEmitter {
   Reflect.setPrototypeOf(obj as Object, undertake)
   Reflect.setPrototypeOf(undertake, destProto)
 
-  return obj as T & EventEmitter
+  // mark
+  ;(obj as any)._extend = true
+
+  return obj as ExtendFn<T>
 }

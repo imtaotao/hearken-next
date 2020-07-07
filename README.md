@@ -25,10 +25,10 @@ $ yarn build
   manager.add('xxx.mp3')
 
   // play music
-  if (manager.loaded()) {
+  if (manager.canPlay()) {
     manager.plugins.player.start()
   } else {
-    manager.loaded.on(() => {
+    manager.canPlay.on(() => {
       manager.plugins.player.start()
     })
   }
