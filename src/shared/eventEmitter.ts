@@ -6,7 +6,7 @@ import { assert } from './index'
 // so, we need check parameter.
 
 type listenerType = Set<Function>
-export type ExtendFn<T> = T & EventEmitter & { _extend: boolean }
+export type ExtendEvent<T> = T & EventEmitter & { _extend: boolean }
 
 const assertListener = (liseners: listenerType) =>
   !liseners || liseners.size === 0
@@ -79,7 +79,7 @@ const INSTALL_METHODS = Object.getOwnPropertyNames(
 
 export function extend<T>(obj: T) {
   if ((obj as any)._extend) {
-    return obj as ExtendFn<T>
+    return obj as ExtendEvent<T>
   }
 
   const undertake = {}
@@ -101,5 +101,5 @@ export function extend<T>(obj: T) {
   // mark
   ;(obj as any)._extend = true
 
-  return obj as ExtendFn<T>
+  return obj as ExtendEvent<T>
 }

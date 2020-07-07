@@ -1,5 +1,5 @@
 import { Manager } from './runtime'
-import { extend, ExtendFn } from '../shared/eventEmitter'
+import { extend, ExtendEvent } from '../shared/eventEmitter'
 import { last, assert, isAudioNode } from '../shared/index'
 import { ReAudioContext, createAudioContext } from '../shared/audio'
 
@@ -9,15 +9,13 @@ type AudioNodeFn = (prevAudioNode: AudioNode | null) => AudioNode | AudioNode[]
 export interface Context {
   manager: Manager
   _canplay: boolean
-  closed: boolean
   audioNodes: AudioNode[]
   nodes: Set<AudioNodeFn>
   audioContext: ReAudioContext
-  close: ExtendFn<Function>
-  canplay: ExtendFn<Function>
-  connect: ExtendFn<Function>
-  registrar: ExtendFn<Function>
-  disconnect: ExtendFn<Function>
+  canplay: ExtendEvent<Function>
+  connect: ExtendEvent<Function>
+  registrar: ExtendEvent<Function>
+  disconnect: ExtendEvent<Function>
 }
 
 // Connect audio node
@@ -84,7 +82,6 @@ function connect(this: Context) {
     prevNode = curNode
   }
 
-  this.closed = false
   this.audioNodes = nodes
 }
 
@@ -97,31 +94,6 @@ function disconnect(this: Context) {
   }
 }
 
-// Close audio context, free up resources
-function close(this: Context): Promise<void> {
-  if (__DEV__) {
-    assert(
-      !this.closed,
-      'Current audioContext has been closed, ' +
-        'you need to create a new manager.',
-    )
-  }
-  return this.audioContext.close().then(() => {
-    this.closed = true
-    this.nodes.clear()
-    this.close.emit()
-    this.audioNodes.length = 0
-    this._canplay = false
-
-    // Clear all listener
-    this.close.removeAll()
-    this.canplay.removeAll()
-    this.connect.removeAll()
-    this.registrar.removeAll()
-    this.disconnect.removeAll()
-  })
-}
-
 // If the audio source is loaded that's can play
 function canplay(this: Context) {
   return this._canplay
@@ -132,12 +104,10 @@ export function createContext(manager: Manager): Context {
 
   return {
     manager,
+    audioContext,
     _canplay: false,
-    closed: false,
     audioNodes: [],
     nodes: new Set<AudioNodeFn>(),
-    audioContext,
-    close: extend(close),
     canplay: extend(canplay),
     connect: extend(connect),
     registrar: extend(registrar),
