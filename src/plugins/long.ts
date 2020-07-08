@@ -1,7 +1,7 @@
 import { LONG_PLAYER } from './symbols'
 import { findNode } from '../shared/audio'
 import { Manager } from '../manager/runtime'
-import { isVoid, assert } from '../shared/index'
+import { isVoid, assert, range } from '../shared/index'
 import { extend, ExtendEvent } from 'src/shared/eventEmitter'
 
 interface StartOptions {
@@ -16,6 +16,7 @@ interface Player {
   manager: Manager
   options?: StartOptions
   playing: () => boolean
+  duration: () => number
   el: HTMLAudioElement | null
   pause: ExtendEvent<() => void>
   close: ExtendEvent<() => void>
@@ -114,6 +115,19 @@ function forward(this: Player, val: number) {
   if (__DEV__) {
     assert(typeof val === 'number', 'Not a legal value.')
   }
+  const duration = this.duration()
+  if (duration > 0) {
+    const real = range(0, duration, val)
+    ;(this.el as HTMLAudioElement).currentTime = real
+    this.forward.emit(real)
+  }
+}
+
+function duration(this: Player) {
+  if (__DEV__) {
+    assert(!isVoid(this.el), 'Lack audio element')
+  }
+  return this.el ? this.el.duration : 0
 }
 
 function playing(this: Player) {
@@ -126,6 +140,7 @@ export function Long(manager: Manager, options?: StartOptions): Player {
     options,
     el: null,
     playing,
+    duration,
     type: LONG_PLAYER,
     add: extend(add),
     mute: extend(mute),
