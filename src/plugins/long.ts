@@ -90,19 +90,24 @@ function volume(this: Player, val: number) {
 
   // Use `gainNode` nodes first
   if (gainNode) {
-    ;(gainNode as GainNode)?.gain.setValueAtTime(val, audioContext.currentTime)
+    ;(gainNode as GainNode).gain.setValueAtTime(val, audioContext.currentTime)
   } else {
     if (__DEV__) {
       assert(!isVoid(this.el), 'Lack audio element')
     }
     ;(this.el as HTMLAudioElement).volume = val
   }
+  this.volume.emit(val)
 }
 
 function mute(this: Player, val: boolean) {
   if (__DEV__) {
+    assert(!isVoid(this.el), 'Lack audio element')
     assert(typeof val === 'boolean', 'Not a legal value.')
   }
+
+  ;(this.el as HTMLAudioElement).muted = val
+  this.mute.emit(val)
 }
 
 function forward(this: Player, val: number) {

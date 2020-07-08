@@ -25,7 +25,7 @@ export function createFilter(ctx: AudioContext) {
 
 export function createAnalyser(ctx: AudioContext, fftSize: number) {
   const analyser = ctx.createAnalyser()
-  // fourier transform parameter
+  // Fourier transform parameter
   analyser.fftSize = fftSize * 2
   return analyser
 }
@@ -51,7 +51,5 @@ export function createMediaElementSource(
 
 export function findNode(nodes: AudioNode[], name: string) {
   if (!nodes || nodes.length === 0) return null
-  return nodes.find((n) => {
-    return Object.prototype.toString.call(n) === `[object ${name}]`
-  })
+  return nodes.find((n) => n.toString() === `[object ${name}]`)
 }
