@@ -48,3 +48,10 @@ export function createMediaElementSource(
     return source
   }
 }
+
+export function findNode(nodes: AudioNode[], name: string) {
+  if (!nodes || nodes.length === 0) return null
+  return nodes.find((n) => {
+    return Object.prototype.toString.call(n) === `[object ${name}]`
+  })
+}

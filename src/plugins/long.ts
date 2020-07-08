@@ -1,12 +1,14 @@
 import { LONG_PLAYER } from './symbols'
-import { assert } from '../shared/index'
+import { findNode } from '../shared/audio'
 import { Manager } from '../manager/runtime'
+import { isVoid, assert } from '../shared/index'
 import { extend, ExtendEvent } from 'src/shared/eventEmitter'
 
 interface StartOptions {
   loop?: boolean
   crossOrigin?: string
   audio?: HTMLAudioElement
+  preload?: 'auto' | 'meta' | 'none'
 }
 
 interface Player {
@@ -32,11 +34,18 @@ function add(this: Player, url: string) {
   const opts = this.options || {}
   const el = (this.el = opts.audio || new Audio())
 
-  el.src = url
-  el.loop = Boolean(opts.loop)
   if (opts.crossOrigin) {
     el.crossOrigin = opts.crossOrigin
   }
+  // We need auto load audio resource,
+  // of course, allow specify too
+  if (!opts.preload) {
+    opts.preload = 'auto'
+  }
+
+  el.src = url
+  el.loop = Boolean(opts.loop)
+  el.preload = opts.preload
   el.oncanplay = () => {
     // Alter context canplay attribute and dispatch event
     this.manager.context._canplay = true
@@ -75,6 +84,18 @@ function pause(this: Player) {
 function volume(this: Player, val: number) {
   if (__DEV__) {
     assert(typeof val === 'number' && !Number.isNaN(val), 'Not a legal value.')
+  }
+  const { audioNodes, audioContext } = this.manager.context
+  const gainNode = findNode(audioNodes, 'GainNode')
+
+  // Use `gainNode` nodes first
+  if (gainNode) {
+    ;(gainNode as GainNode)?.gain.setValueAtTime(val, audioContext.currentTime)
+  } else {
+    if (__DEV__) {
+      assert(!isVoid(this.el), 'Lack audio element')
+    }
+    ;(this.el as HTMLAudioElement).volume = val
   }
 }
 
