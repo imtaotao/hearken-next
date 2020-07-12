@@ -28,11 +28,11 @@ export class EventEmitter {
     if (__DEV__) {
       assertCallback(callback)
     }
-    const callOnce = () => {
-      callback()
-      this.remove(callOnce)
+    const wraper = (...args: any[]) => {
+      callback(...args)
+      this.remove(wraper)
     }
-    this.on(callOnce)
+    this.on(wraper)
   }
 
   emit(...data: any[]) {

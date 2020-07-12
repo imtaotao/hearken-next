@@ -4,7 +4,7 @@
     "outDir": "tsDist",
     "sourceMap": true,
     "module": "esnext",
-    "target": "es5",
+    "target": "esnext",
     "moduleResolution": "node",
     "allowJs": false,
     "strict": true,
