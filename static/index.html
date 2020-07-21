@@ -12,9 +12,17 @@
 
   const musicURL = './media/md.mp3'
   const manager = new Hearken.Manager()
-
   const player = manager.apply(Long)
+
+  window.p = player
   player.add(musicURL)
+  // if (manager.context.canplay()) {
+  //   player.play()
+  // } else {
+  //   manager.context.canplay.on(() => {
+  //     player.play()
+  //   })
+  // }
 
   console.log(manager);
 </script>
