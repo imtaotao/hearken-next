@@ -4,6 +4,7 @@
   "description": "A tiny and beautiful audio library",
   "main": "index.js",
   "module": "dist/hearken.esm.js",
+  "types": "dist/src/index.d.ts",
   "scripts": {
     "kill": "pkill node",
     "dev": "node ./scripts/develop.js",
