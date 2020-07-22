@@ -14,6 +14,14 @@
   const manager = new Hearken.Manager()
   const player = manager.apply(Long)
 
+  // manager.context.registrar(ctx => {
+  //   return audioNode => {
+  //     console.log(audioNode);
+  //   }
+  // })
+
+  manager.context.connect()
+
   window.p = player
   player.add(musicURL)
   // if (manager.context.canplay()) {

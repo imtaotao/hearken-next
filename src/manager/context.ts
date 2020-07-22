@@ -21,7 +21,10 @@ export interface Context {
 // Connect audio node
 function registrar(this: Context, registrar: AudioNodeWrap) {
   if (__DEV__) {
-    assert(typeof registrar === 'function', '`registrar` is not a function.')
+    assert(
+      typeof registrar === 'function',
+      'registrar "callback" is not a function.',
+    )
   }
 
   const wrap = { fn: registrar }
@@ -34,7 +37,7 @@ function registrar(this: Context, registrar: AudioNodeWrap) {
       'The registrar should return a function, ' +
         'like this: \n\n' +
         `
-          manager.registrar(context => {
+          manager.context.registrar(context => {
             return audioNode => {
               context.AudioContext.createBiquadFilter()
             }
@@ -47,8 +50,8 @@ function registrar(this: Context, registrar: AudioNodeWrap) {
 
 function connect(this: Context) {
   // We need collect nodes to use when disconnected
-  let prevNode: AudioNode | null = null
   const ctx = this.audioContext
+  let prevNode: AudioNode = ctx.destination
   const nodes: AudioNode[] = [ctx.destination]
 
   this.connect.emit()
@@ -58,7 +61,11 @@ function connect(this: Context) {
     if (Array.isArray(curNode)) {
       if (__DEV__) {
         curNode.forEach((n) => {
-          assert(isAudioNode(n), 'Should return an audioNode.')
+          assert(
+            isAudioNode(n),
+            'registrar "callback" should return an audioNode, ' +
+              `but now is '${typeof n}'`,
+          )
         })
       }
 
@@ -66,7 +73,11 @@ function connect(this: Context) {
       nodes.push.apply(nodes, curNode)
     } else {
       if (__DEV__) {
-        assert(isAudioNode(curNode), 'Should return an audioNode.')
+        assert(
+          isAudioNode(curNode),
+          'registrar "callback" should return an audioNode, ' +
+            `but now is '${typeof curNode}'`,
+        )
       }
 
       prevNode = curNode

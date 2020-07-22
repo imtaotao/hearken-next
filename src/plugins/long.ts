@@ -1,8 +1,8 @@
 import { LONG_PLAYER } from './symbols'
 import { findNode } from '../shared/audio'
 import { Manager } from '../manager/runtime'
-import { isVoid, assert, range } from '../shared/index'
 import { extend, ExtendEvent } from 'src/shared/eventEmitter'
+import { isVoid, assert, range, warn } from '../shared/index'
 
 interface StartOptions {
   loop?: boolean
@@ -14,6 +14,7 @@ interface StartOptions {
 interface Player {
   type: Symbol
   manager: Manager
+  context: Manager['context']
   options?: StartOptions
   playing: () => boolean
   duration: () => number
@@ -62,11 +63,12 @@ function close(this: Player) {
   }
   // We don't call context close, because that's a single audio
   this.manager.context.disconnect()
+  this.el && (this.el.currentTime = 0)
   this.close.emit()
 }
 
 function play(this: Player) {
-  if (this.el && this.playing()) {
+  if (this.el && !this.playing()) {
     return this.el.play().then(() => {
       this.play.emit()
       return true
@@ -84,21 +86,34 @@ function pause(this: Player) {
 
 function volume(this: Player, val: number) {
   if (__DEV__) {
-    assert(typeof val === 'number' && !Number.isNaN(val), 'Not a legal value.')
+    assert(
+      typeof val === 'undefined' ||
+        (typeof val === 'number' && !Number.isNaN(val)),
+      'Not a legal value.',
+    )
   }
+  let cur
   const { audioNodes, audioContext } = this.manager.context
   const gainNode = findNode(audioNodes, 'GainNode')
 
   // Use `gainNode` nodes first
   if (gainNode) {
-    ;(gainNode as GainNode).gain.setValueAtTime(val, audioContext.currentTime)
+    if (!isVoid(val)) {
+      ;(gainNode as GainNode).gain.setValueAtTime(val, audioContext.currentTime)
+    }
+    cur = (gainNode as GainNode).gain.value
   } else {
     if (__DEV__) {
       assert(!isVoid(this.el), 'Lack audio element')
     }
-    ;(this.el as HTMLAudioElement).volume = val
+    if (!isVoid(val)) {
+      ;(this.el as HTMLAudioElement).volume = val
+    }
+    cur = this.el!.volume
   }
+
   this.volume.emit(val)
+  return cur
 }
 
 function mute(this: Player, val: boolean) {
@@ -114,6 +129,9 @@ function mute(this: Player, val: boolean) {
 function forward(this: Player, val: number) {
   if (__DEV__) {
     assert(typeof val === 'number', 'Not a legal value.')
+    if (!this.playing()) {
+      warn('The audio is paused, you may need to recall `player.play()`', true)
+    }
   }
   const duration = this.duration()
   if (duration > 0) {
@@ -131,12 +149,14 @@ function duration(this: Player) {
 }
 
 function playing(this: Player) {
-  return this.el ? ((this.el as unknown) as HTMLAudioElement).paused : false
+  return this.el ? !((this.el as unknown) as HTMLAudioElement).paused : false
 }
 
 export function Long(manager: Manager, options?: StartOptions): Player {
+  const { context } = manager
   return {
     manager,
+    context,
     options,
     el: null,
     playing,
