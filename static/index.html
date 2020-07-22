@@ -8,12 +8,31 @@
 <body>
 <div id="app"></div>
 <script type="module">
-  import Hearken from './lib/hearken.js'
+  import Hearken, { Long } from './lib/hearken.js'
 
-  console.log(Hearken);
+  const musicURL = './media/md.mp3'
   const manager = new Hearken.Manager()
-  console.log(manager)
-  manager.apply(() => {})
+  const player = manager.apply(Long)
+
+  // manager.context.registrar(ctx => {
+  //   return audioNode => {
+  //     console.log(audioNode);
+  //   }
+  // })
+
+  manager.context.connect()
+
+  window.p = player
+  player.add(musicURL)
+  // if (manager.context.canplay()) {
+  //   player.play()
+  // } else {
+  //   manager.context.canplay.on(() => {
+  //     player.play()
+  //   })
+  // }
+
+  console.log(manager);
 </script>
 </body>
 </html>

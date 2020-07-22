@@ -59,11 +59,15 @@ export class Manager {
   }
 
   // Install plugin
-  public apply(plugin: Function, ...args: any[]) {
+  public apply<T extends AnyFunction>(
+    plugin: T,
+    ...args: any[]
+  ): ReturnType<T> {
+    const pluginName = plugin?.name
     if (__DEV__) {
       assert(typeof plugin === 'function', 'The plugin should be a function.')
       assert(
-        !!plugin.name,
+        !!pluginName,
         'The plugin needs to specify a name. \n\n' +
           `
             // You can\'t use it like this
@@ -76,9 +80,13 @@ export class Manager {
             manager.apply(function player() {})
           `,
       )
+      assert(
+        !Reflect.has(this.plugins, pluginName!),
+        `${pluginName} has already been registered, please do not register again.`,
+      )
     }
 
-    const pluginName = plugin.name
-    this.plugins[pluginName] = plugin(this, ...args)
+    this.plugins[pluginName!] = plugin(this, ...args)
+    return this.plugins[pluginName!]
   }
 }
