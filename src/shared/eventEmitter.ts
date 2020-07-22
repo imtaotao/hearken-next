@@ -15,30 +15,29 @@ const assertCallback = (fn: Function) =>
   assert(typeof fn === 'function', '`callback` must be a function')
 
 export class EventEmitter {
-  _callFlag = false
+  _callValue = undefined
   _liseners: listenerType = new Set()
 
-  flag(flag: boolean) {
-    if (__DEV__) {
-      assert(typeof flag === 'boolean', '`flag` should be a boolean')
-    }
-    this._callFlag = flag
+  flag(val: any) {
+    this._callValue = val
   }
 
   on(callback: Function) {
     if (__DEV__) {
       assertCallback(callback)
     }
+    if (this._callValue !== undefined) {
+      callback(this._callValue)
+    }
     this._liseners.add(callback)
-    this._callFlag && callback()
   }
 
   once(callback: Function) {
     if (__DEV__) {
       assertCallback(callback)
     }
-    if (this._callFlag) {
-      callback()
+    if (this._callValue !== undefined) {
+      callback(this._callValue)
     } else {
       const wraper = (...args: any[]) => {
         callback(...args)

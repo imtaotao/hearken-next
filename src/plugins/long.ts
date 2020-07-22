@@ -4,6 +4,8 @@ import { Manager } from '../manager/runtime'
 import { extend, ExtendEvent } from 'src/shared/eventEmitter'
 import { isVoid, assert, range, warn } from '../shared/index'
 
+type Provider<T> = (inject: (n: keyof T, val: T[keyof T]) => any) => void
+
 interface StartOptions {
   loop?: boolean
   crossOrigin?: string
@@ -26,6 +28,7 @@ interface Player {
   mute: ExtendEvent<(val: boolean) => void>
   volume: ExtendEvent<(val: number) => void>
   forward: ExtendEvent<(val: number) => void>
+  expand: ExtendEvent<<T>(provider: Provider<T>) => void>
 }
 
 // Use audio element load source and control audio behavior
@@ -152,6 +155,22 @@ function playing(this: Player) {
   return this.el ? !((this.el as unknown) as HTMLAudioElement).paused : false
 }
 
+// Expand player interface
+function expand<T>(this: Player, provider: Provider<T>) {
+  if (__DEV__) {
+    assert(typeof provider === 'function', 'error')
+  }
+  provider((n, obj) => {
+    if (__DEV__) {
+      assert(typeof n === 'string', 'error')
+      assert(!isVoid(obj), 'error')
+      assert(!Reflect.has(this, n), 'error')
+    }
+    ;((this as unknown) as T)[n] = obj
+  })
+  return this as Player & T
+}
+
 export function Long(manager: Manager, options?: StartOptions): Player {
   const { context } = manager
   return {
@@ -168,6 +187,7 @@ export function Long(manager: Manager, options?: StartOptions): Player {
     close: extend(close),
     pause: extend(pause),
     volume: extend(volume),
+    expand: extend(expand),
     forward: extend(forward),
   }
 }
