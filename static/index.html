@@ -8,11 +8,11 @@
 <body>
 <div id="app"></div>
 <script type="module">
-  import Hearken, { Long } from './lib/hearken.js'
+  import Hearken, { LongPlayer } from './lib/hearken.js'
 
   const musicURL = './media/md.mp3'
   const manager = new Hearken.Manager()
-  const player = manager.apply(Long)
+  const player = manager.apply(LongPlayer)
 
   // manager.context.registrar(ctx => {
   //   return audioNode => {

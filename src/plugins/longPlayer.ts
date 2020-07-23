@@ -6,18 +6,18 @@ import { isVoid, assert, range, warn } from '../shared/index'
 
 type Provider<T> = (inject: (n: keyof T, val: T[keyof T]) => any) => void
 
-interface StartOptions {
+interface LongOptions {
   loop?: boolean
   crossOrigin?: string
   audio?: HTMLAudioElement
   preload?: 'auto' | 'meta' | 'none'
 }
 
-interface Player {
+export interface LPlayer {
   type: Symbol
   manager: Manager
   context: Manager['context']
-  options?: StartOptions
+  options: LongOptions
   playing: () => boolean
   duration: () => number
   el: HTMLAudioElement | null
@@ -32,7 +32,7 @@ interface Player {
 }
 
 // Use audio element load source and control audio behavior
-function add(this: Player, url: string) {
+function add(this: LPlayer, url: string) {
   if (__DEV__) {
     assert(typeof url === 'string', 'error')
   }
@@ -60,7 +60,7 @@ function add(this: Player, url: string) {
 }
 
 // When call stop method，need free up resource
-function close(this: Player) {
+function close(this: LPlayer) {
   if (this.playing()) {
     this.el?.pause()
   }
@@ -70,7 +70,7 @@ function close(this: Player) {
   this.close.emit()
 }
 
-function play(this: Player) {
+function play(this: LPlayer) {
   if (this.el && !this.playing()) {
     return this.el.play().then(() => {
       this.play.emit()
@@ -80,14 +80,14 @@ function play(this: Player) {
   return Promise.resolve(false)
 }
 
-function pause(this: Player) {
+function pause(this: LPlayer) {
   if (this.playing()) {
     this.el?.pause()
     this.pause.emit()
   }
 }
 
-function volume(this: Player, val: number) {
+function volume(this: LPlayer, val: number) {
   if (__DEV__) {
     assert(
       typeof val === 'undefined' ||
@@ -119,7 +119,7 @@ function volume(this: Player, val: number) {
   return cur
 }
 
-function mute(this: Player, val: boolean) {
+function mute(this: LPlayer, val: boolean) {
   if (__DEV__) {
     assert(!isVoid(this.el), 'Lack audio element')
     assert(typeof val === 'boolean', 'Not a legal value.')
@@ -129,7 +129,7 @@ function mute(this: Player, val: boolean) {
   this.mute.emit(val)
 }
 
-function forward(this: Player, val: number) {
+function forward(this: LPlayer, val: number) {
   if (__DEV__) {
     assert(typeof val === 'number', 'Not a legal value.')
     if (!this.playing()) {
@@ -144,19 +144,19 @@ function forward(this: Player, val: number) {
   }
 }
 
-function duration(this: Player) {
+function duration(this: LPlayer) {
   if (__DEV__) {
     assert(!isVoid(this.el), 'Lack audio element')
   }
   return this.el ? this.el.duration : 0
 }
 
-function playing(this: Player) {
+function playing(this: LPlayer) {
   return this.el ? !((this.el as unknown) as HTMLAudioElement).paused : false
 }
 
 // Expand player interface
-function expand<T>(this: Player, provider: Provider<T>) {
+function expand<T>(this: LPlayer, provider: Provider<T>) {
   if (__DEV__) {
     assert(typeof provider === 'function', 'Provider must be a function')
   }
@@ -168,10 +168,10 @@ function expand<T>(this: Player, provider: Provider<T>) {
     }
     ;((this as unknown) as T)[n] = obj
   })
-  return this as Player & T
+  return this as LPlayer & T
 }
 
-export function Long(manager: Manager, options?: StartOptions): Player {
+export function LongPlayer(manager: Manager, options: LongOptions = {}) {
   const { context } = manager
   return {
     manager,
@@ -189,5 +189,5 @@ export function Long(manager: Manager, options?: StartOptions): Player {
     volume: extend(volume),
     expand: extend(expand),
     forward: extend(forward),
-  }
+  } as LPlayer
 }

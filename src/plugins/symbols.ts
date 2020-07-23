@@ -1,2 +1,7 @@
+export const FILTER = Symbol.for('Hearken.filter')
+export const PANNER = Symbol.for('Hearken.panner')
+export const CONVOLVER = Symbol.for('Hearken.convolver')
 export const LONG_PLAYER = Symbol.for('Hearken.longPlayer')
 export const SHORT_PLAYER = Symbol.for('Hearken.shortPlayer')
+export const EXPAND_PLAYER = Symbol.for('Hearken.expandPlayer')
+export const VISUALIZATION = Symbol.for('Hearken.visualization')
