@@ -8,6 +8,7 @@ const resolve = require('rollup-plugin-node-resolve')
 const typescript = require('rollup-plugin-typescript2')
 
 const packageJSON = require('../package.json')
+const chalk = require('chalk')
 const libName = packageJSON.name
 const libDir = path.resolve(__dirname, '../static/lib')
 
@@ -74,7 +75,7 @@ fs.watch(watchFiles, { recursive: true }, () => {
 })
 
 buildVersion()
-console.log('Watching src files...')
+console.log(chalk.cyan.bold('👿 Watching src files...'))
 
 if (process.argv.includes('-o')) {
   // start dev server...
@@ -84,7 +85,7 @@ if (process.argv.includes('-o')) {
     process.exit(1)
   }
 
-  childProcess.fork(serverPath, {}, error => {
+  childProcess.fork(serverPath, {}, (error) => {
     if (error) {
       console.error('Server start error:', error)
       process.exit(1)

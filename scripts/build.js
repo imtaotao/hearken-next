@@ -1,4 +1,5 @@
 const path = require('path')
+const chalk = require('chalk')
 const rollup = require('rollup')
 const rm = require('rimraf').sync
 const babel = require('rollup-plugin-babel')
@@ -8,11 +9,12 @@ const replace = require('rollup-plugin-replace')
 const { terser } = require('rollup-plugin-terser')
 const resolve = require('rollup-plugin-node-resolve')
 const typescript = require('rollup-plugin-typescript2')
+const { DEFAULT_EXTENSIONS } = require('@babel/core')
 
 const packageJSON = require('../package.json')
 const libName = packageJSON.name
 const entryPath = path.resolve(__dirname, '../src/index.ts')
-const outputPath = filename => path.resolve(__dirname, '../dist', filename)
+const outputPath = (filename) => path.resolve(__dirname, '../dist', filename)
 const umdLibName = libName.charAt(0).toUpperCase() + libName.slice(1)
 
 const banner =
@@ -60,7 +62,7 @@ const uglifyCjs = {
   },
 }
 
-const createReplacePlugin = isProd => {
+const createReplacePlugin = (isProd) => {
   return replace({
     __DEV__: !isProd,
     __TEST__: false,
@@ -74,16 +76,19 @@ async function build(cfg, isProd, isUglify = false) {
   const buildCfg = {
     input: cfg.input,
     plugins: [
-      cleanup(),
-      resolve(),
-      babel({
-        babelrc: true,
-        exclude: 'node_modules/**',
+      cleanup({
+        extensions: ['.js', '.ts', '.tsx'],
       }),
+      resolve(), // node_modules
       typescript({
         typescript: require('typescript'),
         tsconfig: path.resolve(__dirname, '../tsconfig.json'),
         clean: true, // no cache
+      }),
+      babel({
+        babelrc: true,
+        exclude: 'node_modules/**',
+        extensions: [...DEFAULT_EXTENSIONS, '.ts', '.tsx'],
       }),
       cmd(),
       createReplacePlugin(isProd),
@@ -100,10 +105,12 @@ async function build(cfg, isProd, isUglify = false) {
 }
 
 console.clear()
+console.log(chalk.blue.bold('📦 Building...\n'))
+
 // Delete old build files
 rm(path.resolve(__dirname, '../dist'))
 
-const prodConfig = cfg => {
+const prodConfig = (cfg) => {
   const file = cfg.output.file
   const basePrefix = file.slice(0, file.length - 2)
 
@@ -130,7 +137,8 @@ const buildVersion = async () => {
 
   try {
     await Promise.all(builds)
-    console.log('success!')
+    console.clear()
+    console.log(chalk.green.bold('✔ Build success!'))
   } catch (error) {
     console.error('[BUILD ERROR]: ', error)
   }

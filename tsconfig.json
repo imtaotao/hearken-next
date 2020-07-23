@@ -3,7 +3,7 @@
     "baseUrl": ".",
     "outDir": "tsDist",
     "sourceMap": true,
-    "target": "es5",
+    "target": "esnext",
     "module": "esnext",
     "moduleResolution": "node",
     "allowJs": false,
