@@ -79,9 +79,10 @@ fs.watch(watchFiles, { recursive: true }, () => {
 
 buildVersion()
 
+// start dev server...
 if (process.argv.includes('-o')) {
-  // start dev server...
   const serverPath = path.join(__dirname, './server.js')
+
   if (fs.existsSync(serverPath)) {
     const server = childProcess.fork(serverPath, ['child'])
 
@@ -92,14 +93,18 @@ if (process.argv.includes('-o')) {
     })
 
     server.on('close', (code) => {
-      console.log(chalk.red.bold(`Dev server exit at '${code}'`))
+      console.log(
+        code === 1
+          ? chalk.red.bold(`Dev server exit at '${code}'`)
+          : chalk.yellow.bold(`Dev server exit at '${code}'`),
+      )
     })
 
     process.on('exit', () => {
       server.kill('SIGINT')
     })
   } else {
-    console.error('Dev server is not fount.')
+    console.error(chalk.red.bold('Dev server is not fount.'))
     process.exit(1)
   }
 }
