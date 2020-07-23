@@ -158,13 +158,13 @@ function playing(this: Player) {
 // Expand player interface
 function expand<T>(this: Player, provider: Provider<T>) {
   if (__DEV__) {
-    assert(typeof provider === 'function', 'error')
+    assert(typeof provider === 'function', 'Provider must be a function')
   }
   provider((n, obj) => {
     if (__DEV__) {
-      assert(typeof n === 'string', 'error')
-      assert(!isVoid(obj), 'error')
-      assert(!Reflect.has(this, n), 'error')
+      assert(typeof n === 'string', 'expand name must be a string')
+      assert(!isVoid(obj), 'expand target must be a function or object')
+      assert(!Reflect.has(this, n), `${n} is already registered`)
     }
     ;((this as unknown) as T)[n] = obj
   })
