@@ -1,5 +1,6 @@
 const fs = require('fs')
 const path = require('path')
+const chalk = require('chalk')
 const rollup = require('rollup')
 const rm = require('rimraf').sync
 const childProcess = require('child_process')
@@ -8,7 +9,6 @@ const resolve = require('rollup-plugin-node-resolve')
 const typescript = require('rollup-plugin-typescript2')
 
 const packageJSON = require('../package.json')
-const chalk = require('chalk')
 const libName = packageJSON.name
 const libDir = path.resolve(__dirname, '../static/lib')
 
@@ -53,7 +53,9 @@ async function build(cfg) {
   await bundle.write(cfg.output)
 }
 
+const title = chalk.cyan.bold('👿 Watching src files...')
 console.clear()
+console.log(title)
 // Delete old build files
 rm(libDir)
 
@@ -70,25 +72,34 @@ const watchFiles = path.resolve(__dirname, '../src')
 fs.watch(watchFiles, { recursive: true }, () => {
   console.clear()
   rm(libDir)
-  console.log('Rebuild: ' + ++i)
+  console.log(title)
+  console.log('Rebuild: ' + chalk.green.bold(++i))
   buildVersion()
 })
 
 buildVersion()
-console.log(chalk.cyan.bold('👿 Watching src files...'))
 
 if (process.argv.includes('-o')) {
   // start dev server...
-  const serverPath = path.join(__dirname, '../static/server.js')
-  if (!fs.existsSync(serverPath)) {
-    console.error('The static server is not fount.')
+  const serverPath = path.join(__dirname, './server.js')
+  if (fs.existsSync(serverPath)) {
+    const server = childProcess.fork(serverPath, ['child'])
+
+    server.on('error', (error) => {
+      console.error(chalk.red.bold('Server start error:'), error)
+      server.exit(1)
+      process.exit(1)
+    })
+
+    server.on('close', (code) => {
+      console.log(chalk.red.bold(`Dev server exit at '${code}'`))
+    })
+
+    process.on('exit', () => {
+      server.kill('SIGINT')
+    })
+  } else {
+    console.error('Dev server is not fount.')
     process.exit(1)
   }
-
-  childProcess.fork(serverPath, {}, (error) => {
-    if (error) {
-      console.error('Server start error:', error)
-      process.exit(1)
-    }
-  })
 }

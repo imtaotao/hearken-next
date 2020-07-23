@@ -7,9 +7,9 @@ const cmd = require('rollup-plugin-commonjs')
 const cleanup = require('rollup-plugin-cleanup')
 const replace = require('rollup-plugin-replace')
 const { terser } = require('rollup-plugin-terser')
+const { DEFAULT_EXTENSIONS } = require('@babel/core')
 const resolve = require('rollup-plugin-node-resolve')
 const typescript = require('rollup-plugin-typescript2')
-const { DEFAULT_EXTENSIONS } = require('@babel/core')
 
 const packageJSON = require('../package.json')
 const libName = packageJSON.name
