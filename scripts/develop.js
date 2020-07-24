@@ -71,15 +71,16 @@ let i = 0
 let server = null
 const watchFiles = path.resolve(__dirname, '../src')
 
-fs.watch(watchFiles, { recursive: true }, () => {
+fs.watch(watchFiles, { recursive: true }, async () => {
   console.clear()
   rm(libDir)
   console.log(title)
   console.log('Rebuild: ' + chalk.green.bold(++i))
-  buildVersion()
+
+  await buildVersion()
 
   if (server !== null) {
-    server.send('reload')
+    server.send(`Rebuild: ${i}`)
   }
 })
 

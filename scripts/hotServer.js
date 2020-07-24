@@ -3,7 +3,7 @@ const path = require('path')
 const WebSocket = require('ws')
 const chalk = require('chalk')
 
-const HOT_LOAD_JS = () =>
+const HOT_CLIENT = () =>
   '\n' + fs.readFileSync(path.resolve(__dirname, './hotClient.js')).toString()
 
 function genHtml(e) {
@@ -12,7 +12,7 @@ function genHtml(e) {
     : fs
         .readFileSync(e)
         .toString()
-        .replace(/<\/body>/, (k) => `<script>${HOT_LOAD_JS()}</script>${k}`)
+        .replace(/<\/body>/, (k) => `<script>${HOT_CLIENT()}</script>${k}`)
 }
 
 function heartBeat(wss) {
@@ -21,7 +21,7 @@ function heartBeat(wss) {
     c.on('pong', () => (c.isAlive = true))
   })
 
-  const interval = setInterval(() => {
+  let interval = setInterval(() => {
     wss.clients.forEach((c) => {
       if (c.isAlive === false) {
         c.terminate()
@@ -33,13 +33,16 @@ function heartBeat(wss) {
     })
   }, 30000)
 
-  wss.on('close', () => clearInterval(interval))
+  wss.on('close', () => {
+    clearInterval(interval)
+    interval = null
+  })
 }
 
 module.exports = function hotReload() {
   const wss = new WebSocket.Server({ port: 1234 })
 
-  heartBeat()
+  heartBeat(wss)
 
   function koaMiddleware(url, entrance) {
     return async (ctx, next) => {
@@ -47,10 +50,10 @@ module.exports = function hotReload() {
     }
   }
 
-  function reload() {
+  function reload(msg) {
     wss.clients.forEach((c) => {
       if (c.readyState === WebSocket.OPEN) {
-        c.send('reload client')
+        c.send(msg)
       }
     })
   }

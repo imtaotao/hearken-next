@@ -50,7 +50,9 @@ listen(3000, (port) => {
 
     if (process.argv.includes('child')) {
       process.on('message', (msg) => {
-        msg === 'reload' && reload()
+        if (msg.startsWith('Rebuild:')) {
+          reload(msg)
+        }
       })
     } else {
       console.clear()
