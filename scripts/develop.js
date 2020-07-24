@@ -68,13 +68,19 @@ const buildVersion = async () => {
 }
 
 let i = 0
+let server = null
 const watchFiles = path.resolve(__dirname, '../src')
+
 fs.watch(watchFiles, { recursive: true }, () => {
   console.clear()
   rm(libDir)
   console.log(title)
   console.log('Rebuild: ' + chalk.green.bold(++i))
   buildVersion()
+
+  if (server !== null) {
+    server.send('reload')
+  }
 })
 
 buildVersion()
@@ -84,7 +90,7 @@ if (process.argv.includes('-o')) {
   const serverPath = path.join(__dirname, './server.js')
 
   if (fs.existsSync(serverPath)) {
-    const server = childProcess.fork(serverPath, ['child'])
+    server = childProcess.fork(serverPath, ['child'])
 
     server.on('error', (error) => {
       console.error(chalk.red.bold('Server start error:'), error)
