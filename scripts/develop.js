@@ -71,6 +71,7 @@ let i = 0
 let server = null
 const watchFiles = path.resolve(__dirname, '../src')
 
+// Watch codes
 fs.watch(watchFiles, { recursive: true }, async () => {
   console.clear()
   rm(libDir)
@@ -84,34 +85,37 @@ fs.watch(watchFiles, { recursive: true }, async () => {
   }
 })
 
-buildVersion()
+// Start build
+;(async () => {
+  await buildVersion()
 
-// start dev server...
-if (process.argv.includes('-o')) {
-  const serverPath = path.join(__dirname, './server.js')
+  // Start dev server...
+  if (process.argv.includes('-o')) {
+    const serverPath = path.join(__dirname, './server.js')
 
-  if (fs.existsSync(serverPath)) {
-    server = childProcess.fork(serverPath, ['child'])
+    if (fs.existsSync(serverPath)) {
+      server = childProcess.fork(serverPath, ['child'])
 
-    server.on('error', (error) => {
-      console.error(chalk.red.bold('Server start error:'), error)
-      server.exit(1)
+      server.on('error', (error) => {
+        console.error(chalk.red.bold('Server start error:'), error)
+        server.exit(1)
+        process.exit(1)
+      })
+
+      server.on('close', (code) => {
+        console.log(
+          code === 1
+            ? chalk.red.bold(`Dev server exit at '${code}'`)
+            : chalk.yellow.bold(`Dev server exit at '${code}'`),
+        )
+      })
+
+      process.on('exit', () => {
+        server.kill('SIGINT')
+      })
+    } else {
+      console.error(chalk.red.bold('Dev server is not fount.'))
       process.exit(1)
-    })
-
-    server.on('close', (code) => {
-      console.log(
-        code === 1
-          ? chalk.red.bold(`Dev server exit at '${code}'`)
-          : chalk.yellow.bold(`Dev server exit at '${code}'`),
-      )
-    })
-
-    process.on('exit', () => {
-      server.kill('SIGINT')
-    })
-  } else {
-    console.error(chalk.red.bold('Dev server is not fount.'))
-    process.exit(1)
+    }
   }
-}
+})()
