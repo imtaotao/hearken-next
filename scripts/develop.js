@@ -62,9 +62,11 @@ rm(libDir)
 const buildVersion = async () => {
   try {
     await build(esm)
+    return true
   } catch (error) {
-    console.error('[DEVELOP BUILD ERROR]: ', error)
+    console.error(chalk.red.bold('[DEVELOP BUILD ERROR]: '), error)
   }
+  return false
 }
 
 let i = 0
@@ -78,9 +80,7 @@ fs.watch(watchFiles, { recursive: true }, async () => {
   console.log(title)
   console.log('Rebuild: ' + chalk.green.bold(++i))
 
-  await buildVersion()
-
-  if (server !== null) {
+  if ((await buildVersion()) && server !== null) {
     server.send(`Rebuild: ${i}`)
   }
 })

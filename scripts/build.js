@@ -140,7 +140,7 @@ const buildVersion = async () => {
     console.clear()
     console.log(chalk.green.bold('✔ Build success!'))
   } catch (error) {
-    console.error('[BUILD ERROR]: ', error)
+    console.error(chalk.red.bold('[BUILD ERROR]: '), error)
   }
 }
 
