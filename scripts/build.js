@@ -62,15 +62,15 @@ const uglifyCjs = {
   },
 }
 
-const createReplacePlugin = (isProd) => {
+const createReplacePlugin = (__DEV__) => {
   return replace({
-    __DEV__: !isProd,
+    __DEV__,
     __TEST__: false,
     __VERSION__: `'${packageJSON.version}'`,
   })
 }
 
-async function build(cfg, isProd, isUglify = false) {
+async function build(cfg, __DEV__, isUglify = false) {
   cfg.output.sourcemap = false
 
   const buildCfg = {
@@ -91,7 +91,7 @@ async function build(cfg, isProd, isUglify = false) {
         extensions: [...DEFAULT_EXTENSIONS, '.ts', '.tsx'],
       }),
       cmd(),
-      createReplacePlugin(isProd),
+      createReplacePlugin(__DEV__),
     ],
   }
 
@@ -125,14 +125,13 @@ const prodConfig = (cfg) => {
 
 const buildVersion = async () => {
   const builds = [
-    build(esm, false),
-    build(cjs, false),
-    build(umd, false),
-    build(uglifyCjs, false, true),
-    // production version
-    build(prodConfig(esm), true),
-    build(prodConfig(cjs), true),
-    build(prodConfig(umd), true),
+    build(cjs, 'false'),
+    build(umd, 'false'),
+    build(uglifyCjs, 'false', true),
+    build(esm, `(process.env.NODE_ENV !== 'production')`),
+    // Production version
+    build(prodConfig(umd), 'true'),
+    build(prodConfig(cjs), 'true'),
   ]
 
   try {
