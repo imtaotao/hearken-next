@@ -30,7 +30,6 @@ module.exports = {
     quotes: ['error', 'single'],
     'no-var': 2,
     'prefer-const': 2,
-    'no-use-before-define': 2,
     'func-style': [0, 'declaration'],
     'comma-dangle': ['error', 'always-multiline'],
     'multiline-ternary': ['error', 'always-multiline'],

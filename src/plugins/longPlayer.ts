@@ -1,6 +1,7 @@
 import { LONG_PLAYER } from './symbols'
 import { findNode } from '../shared/audio'
 import { Manager } from '../manager/runtime'
+import { createMediaElementSource } from '../shared/audio'
 import { extend, ExtendEvent } from 'src/shared/eventEmitter'
 import { isVoid, assert, range, warn } from '../shared/index'
 
@@ -122,9 +123,11 @@ function volume(this: LPlayer, val: number) {
 function mute(this: LPlayer, val: boolean) {
   if (__DEV__) {
     assert(!isVoid(this.el), 'Lack audio element')
-    assert(typeof val === 'boolean', 'Not a legal value.')
+    assert(
+      typeof val === 'boolean',
+      'Not a legal value, "mute" method need boolean value.',
+    )
   }
-
   ;(this.el as HTMLAudioElement).muted = val
   this.mute.emit(val)
 }
@@ -133,7 +136,7 @@ function forward(this: LPlayer, val: number) {
   if (__DEV__) {
     assert(typeof val === 'number', 'Not a legal value.')
     if (!this.playing()) {
-      warn('The audio is paused, you may need to recall `player.play()`', true)
+      warn('The audio is paused, you may need to recall `player.play()`')
     }
   }
   const duration = this.duration()
@@ -173,7 +176,7 @@ function expand<T>(this: LPlayer, provider: Provider<T>) {
 
 export function LongPlayer(manager: Manager, options: LongOptions = {}) {
   const { context } = manager
-  return {
+  const player = {
     manager,
     context,
     options,
@@ -190,4 +193,18 @@ export function LongPlayer(manager: Manager, options: LongOptions = {}) {
     expand: extend(expand),
     forward: extend(forward),
   } as LPlayer
+
+  context.registrar(() => {
+    return () => {
+      if (__DEV__) {
+        assert(
+          player.el,
+          'Lack audio element, maybe you need call `LongPlayer.add("xx.mp3")`',
+        )
+      }
+      return createMediaElementSource(context.audioContext, player.el!)
+    }
+  })
+
+  return player
 }

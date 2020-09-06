@@ -12,10 +12,10 @@ export interface Context {
   audioNodes: AudioNode[]
   nodes: Set<AudioNodeFn>
   audioContext: ReAudioContext
-  canplay: ExtendEvent<Function>
-  connect: ExtendEvent<Function>
-  registrar: ExtendEvent<Function>
-  disconnect: ExtendEvent<Function>
+  canplay: ExtendEvent<typeof canplay>
+  connect: ExtendEvent<typeof connect>
+  registrar: ExtendEvent<typeof registrar>
+  disconnect: ExtendEvent<typeof disconnect>
 }
 
 // Connect audio node
@@ -39,7 +39,7 @@ function registrar(this: Context, registrar: AudioNodeWrap) {
         `
           manager.context.registrar(context => {
             return audioNode => {
-              context.AudioContext.createBiquadFilter()
+              return context.audioContext.createBiquadFilter()
             }
           })
         `,
@@ -89,6 +89,7 @@ function connect(this: Context) {
   for (let i = nodes.length - 2; i <= 0; i--) {
     const curNode = nodes[i]
     if (!curNode) break
+    console.log(prevNode, curNode)
     ;((prevNode as unknown) as AudioNode).connect(curNode)
     prevNode = curNode
   }

@@ -1,21 +1,47 @@
+const warnPrefix = '\n\n[Hearken warning]'
+
+const dealWithError = (
+  error: string | Error,
+  fn: (val: string | Error, isString: boolean) => void,
+) => {
+  if (typeof error === 'string') {
+    error = `${warnPrefix}: ${error}\n\n`
+    fn(error, true)
+  } else if (error instanceof Error) {
+    if (!error.message.startsWith(warnPrefix)) {
+      error.message = `${warnPrefix}: ${error.message}`
+    }
+    fn(error, false)
+  }
+}
+
 export const EMPTY_OBJ: { readonly [key: string]: any } = __DEV__
   ? Object.freeze({})
   : {}
 
 export const NOOP = () => {}
 
-export function warn(message: string, isWarning?: boolean) {
-  message = `\n[Hearken warning]: ${message}\n\n`
-  if (isWarning) {
-    if (__DEV__) console.warn(message)
-    return
+export function warn(msg: string | Error) {
+  if (__DEV__) {
+    dealWithError(msg, (nv, isString) => {
+      console.warn(isString ? nv : (nv as Error).message)
+    })
   }
-  throw new Error(message)
 }
 
-export function assert(condition: boolean, error: string) {
+export function error(error: string | Error) {
+  dealWithError(error, (nv, isString) => {
+    if (isString) {
+      throw new Error(nv as string)
+    } else {
+      throw nv
+    }
+  })
+}
+
+export function assert(condition: any, msg: string | Error) {
   if (!condition) {
-    if (__DEV__) warn(error)
+    error(msg)
   }
 }
 
